@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PizzaPlanet - Área de Entregas</title>
+  <style>
+    :root {
+      --primary-color: #6b2d10;
+      --secondary-color: #f3c183;
+      --accent-color: #ff8c42;
+      --bg-color: #f8f3ef;
+      --success-color: #28a745;
+    }
+    
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--secondary-color);
+      padding: 1rem;
+      border-bottom: 3px solid var(--primary-color);
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .logo-header {
+      width: 80px;
+      height: 80px;
+      margin-right: 1rem;
+    }
+
+    .titulo {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      flex-grow: 1;
+    }
+
+    .subtitulo {
+      font-size: 1rem;
+      font-weight: normal;
+      margin-top: 0.5rem;
+      color: var(--primary-color);
+    }
+
+    .btn {
+      background-color: var(--accent-color);
+      color: white;
+      padding: 0.5rem 1rem;
+      margin: 0.3rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .btn-success {
+      background-color: var(--success-color);
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      padding: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .top-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin: 1rem auto;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      max-width: 1200px;
+      padding: 0 1.5rem;
+    }
+
+    .pedido-info {
+      background-color: white;
+      padding: 0.8rem;
+      margin: 1rem auto;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      border: 2px dashed var(--primary-color);
+      max-width: 1200px;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+
+    /* Estilos para el ticket */
+    .ticket-container {
+      background-color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+      font-family: 'Courier New', monospace;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .ticket-header {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .ticket-header h2 {
+      color: var(--primary-color);
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .ticket-header p {
+      margin: 0.2rem 0;
+    }
+
+    .ticket-details {
+      margin: 1rem 0;
+      text-align: center;
+    }
+
+    .ticket-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+
+    .ticket-table th, .ticket-table td {
+      padding: 0.3rem;
+      text-align: left;
+    }
+
+    .ticket-table th {
+      font-weight: bold;
+      border-bottom: 2px dotted #000;
+    }
+
+    .ticket-table td {
+      border-bottom: 1px dotted #000;
+    }
+
+    .ticket-total {
+      text-align: right;
+      font-weight: bold;
+      margin-top: 1rem;
+      border-top: 2px dotted #000;
+      padding-top: 0.5rem;
+    }
+
+    .ticket-footer {
+      text-align: center;
+      margin-top: 1rem;
+      font-style: italic;
+      color: #666;
+    }
+
+    /* Estilos para el mapa */
+    .mapa-container {
+      background-color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .mapa-container h2 {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--secondary-color);
+      padding-bottom: 0.5rem;
+      margin-top: 0;
+    }
+
+    .mapa-frame {
+      width: 100%;
+      height: 300px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .tiempo-estimado {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin: 1rem 0;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      border-top: 5px solid var(--accent-color);
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+
+    .modal-btn {
+      padding: 0.5rem 1.5rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .top-buttons {
+        flex-direction: column;
+      }
+
+      .header-content {
+        flex-direction: column;
+      }
+
+      .logo-header {
+        margin-right: 0;
+        margin-bottom: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-container">
+    <div class="header-content">
+      <img src="/src/assets/image/pizzaLogo.png" alt="PizzaPlanet Logo" class="logo-header" />
+      <div>
+        <div class="titulo">PIZZAPLANET // ÁREA DE ENTREGAS</div>
+        <div class="subtitulo">Cada rebanada es un sabor a perfección</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="top-buttons">
+    <button id="btn-consultar-pedido" class="btn">CONSULTAR ORDEN DEL PEDIDO</button>
+    <a href="cocina.html" class="btn">VOLVER A COCINA</a>
+    <a href="/index.html" class="btn">REGRESAR AL MENÚ</a>
+    <a href="/login.html" class="btn">CERRAR SESIÓN</a>
+  </div>
+
+  <div class="pedido-info">
+    Orden del pedido: <strong id="numero-pedido">078PZNTU54A</strong>
+  </div>
+
+  <div class="grid-container">
+    <!-- Sección Ticket -->
+    <section class="ticket-container">
+      <div class="ticket-header">
+        <h2>PIZZAPLANET</h2>
+        <p>WWW.PIZZAPLANET.COM</p>
+      </div>
+      
+      <div class="ticket-details">
+        <p><strong>PEDIDO 0/3PZF0184A</strong></p>
+        <p id="fecha-hora">10/03/2025  18:35:47    NUM1</p>
+      </div>
+      
+      <table class="ticket-table">
+        <thead>
+          <tr>
+            <th>UID</th>
+            <th>ARTÍCULO</th>
+            <th>PRECIO</th>
+            <th>TOTAL</th>
+          </tr>
+        </thead>
+        <tbody id="ticket-items">
+          <tr>
+            <td>1.00</td>
+            <td>PIZZA PEPERONI</td>
+            <td>120.00</td>
+            <td>120.00</td>
+          </tr>
+          <tr>
+            <td>1.00</td>
+            <td>PIZZA HAWAIANA</td>
+            <td>160.00</td>
+            <td>160.00</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div class="ticket-total">
+        <p>SUBTOTAL: $280.00</p>
+        <p>IVA 15%: $42.00</p>
+        <p>TOTAL: $322.00</p>
+      </div>
+      
+      <div class="ticket-footer">
+        <p>--------------------------------</p>
+        <p>Cada rebanada es un sabor a perfección</p>
+        <p>--------------------------------</p>
+      </div>
+    </section>
+
+    <!-- Sección Mapa y Acciones -->
+    <section class="mapa-container">
+      <h2>RUTA DE ENTREGA</h2>
+      
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12832.861751648146!2d-96.76236067750492!3d17.012255870428742!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85c7186947433247%3A0x5a1d0977201503d7!2sInstituto%20Tecnol%C3%B3gico%20del%20Valle%20de%20Oaxaca!5e0!3m2!1ses!2smx!4v1748499226394!5m2!1ses!2smx" 
+        class="mapa-frame" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+      
+      <div class="tiempo-estimado">
+        Tiempo estimado: <span id="tiempo-restante">-- min</span>
+      </div>
+      
+      <div class="action-buttons">
+        <button id="btn-registrar-ruta" class="btn">Registrar la ruta</button>
+        <button id="btn-calcular-tiempo" class="btn">Calcular tiempo de entrega estimada</button>
+        <button id="btn-notificar" class="btn">Notificar al cliente</button>
+        <button id="btn-entregado" class="btn btn-success">Pedido entregado</button>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    &copy; 2025 PIZZAPLANET - Todos los derechos reservados
+  </footer>
+
+  <script>
+    // Variables para el cronómetro de entrega
+    let tiempoEstimadoInterval;
+    let tiempoRestante = 0;
+
+    // Función para iniciar el temporizador de entrega
+    function iniciarTemporizador() {
+      // Generar un tiempo aleatorio entre 10 y 20 minutos (en segundos)
+      tiempoRestante = Math.floor(Math.random() * (1200 - 600 + 1)) + 600;
+      actualizarTiempoRestante();
+      
+      tiempoEstimadoInterval = setInterval(() => {
+        tiempoRestante--;
+        actualizarTiempoRestante();
+        
+        if (tiempoRestante <= 0) {
+          clearInterval(tiempoEstimadoInterval);
+          document.getElementById('tiempo-restante').textContent = "¡Tiempo agotado!";
+        }
+      }, 1000);
+    }
+
+    // Función para actualizar el tiempo restante en pantalla
+    function actualizarTiempoRestante() {
+      const minutos = Math.floor(tiempoRestante / 60);
+      const segundos = tiempoRestante % 60;
+      document.getElementById('tiempo-restante').textContent = `${minutos} min ${segundos} seg`;
+    }
+
+    // Función para mostrar modales
+    function mostrarPopup(mensaje, tipo = "success") {
+      const overlay = document.createElement("div");
+      overlay.className = "modal-overlay";
+      
+      const modal = document.createElement("div");
+      modal.className = "modal-content";
+      modal.innerHTML = `
+        <div class="modal-title">${tipo === "error" ? "¡Atención!" : "¡Éxito!"}</div>
+        <p>${mensaje}</p>
+        <button class="btn modal-btn" onclick="this.closest('.modal-overlay').remove()">
+          Aceptar
+        </button>
+      `;
+      
+      if (tipo === "error") {
+        modal.style.borderTopColor = "#dc3545";
+      }
+      
+      overlay.appendChild(modal);
+      document.body.appendChild(overlay);
+    }
+
+    // Inicializar la página
+    document.addEventListener('DOMContentLoaded', () => {
+      // Actualizar la fecha y hora actual en el ticket
+      const ahora = new Date();
+      const fecha = ahora.toLocaleDateString();
+      const hora = ahora.toLocaleTimeString();
+      document.getElementById('fecha-hora').textContent = `${fecha}  ${hora}    NUM1`;
+      
+      // Botón Consultar Pedido
+      document.getElementById('btn-consultar-pedido').addEventListener('click', () => {
+        mostrarPopup("Detalles del pedido cargados correctamente.");
+      });
+      
+      // Botón Registrar Ruta
+      document.getElementById('btn-registrar-ruta').addEventListener('click', () => {
+        mostrarPopup("Ruta de entrega registrada en el sistema.");
+      });
+      
+      // Botón Calcular Tiempo
+      document.getElementById('btn-calcular-tiempo').addEventListener('click', () => {
+        if (tiempoEstimadoInterval) {
+          mostrarPopup("El tiempo de entrega ya está siendo calculado", "error");
+          return;
+        }
+        iniciarTemporizador();
+        mostrarPopup("Tiempo de entrega estimado calculado. ¡Buen viaje!");
+      });
+      
+      // Botón Notificar al Cliente
+      document.getElementById('btn-notificar').addEventListener('click', () => {
+        mostrarPopup("Notificación enviada al cliente.");
+      });
+      
+      // Botón Pedido Entregado
+      document.getElementById('btn-entregado').addEventListener('click', () => {
+        if (tiempoEstimadoInterval) {
+          clearInterval(tiempoEstimadoInterval);
+        }
+        
+        const ahora = new Date();
+        const horaEntrega = ahora.getHours().toString().padStart(2, '0') + ':' + 
+                            ahora.getMinutes().toString().padStart(2, '0') + ':' + 
+                            ahora.getSeconds().toString().padStart(2, '0');
+        
+        mostrarPopup(`¡Pedido entregado con éxito! Hora: ${horaEntrega}`);
+        
+        // Actualizar el estado del pedido
+        document.getElementById('tiempo-restante').textContent = "Entregado";
+      });
+    });
+  </script>
+</body>
+</html>

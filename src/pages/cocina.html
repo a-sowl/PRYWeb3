@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PizzaPlanet - Área de Cocina</title>
+  <style>
+    :root {
+      --primary-color: #6b2d10;
+      --secondary-color: #f3c183;
+      --accent-color: #ff8c42;
+      --bg-color: #f8f3ef;
+    }
+    
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--secondary-color);
+      padding: 1rem;
+      border-bottom: 3px solid var(--primary-color);
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .logo-header {
+      width: 80px;
+      height: 80px;
+      margin-right: 1rem;
+    }
+
+    .titulo {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      flex-grow: 1;
+    }
+
+    .subtitulo {
+      font-size: 1rem;
+      font-weight: normal;
+      margin-top: 0.5rem;
+      color: var(--primary-color);
+    }
+
+    .btn {
+      background-color: var(--accent-color);
+      color: white;
+      padding: 0.5rem 1rem;
+      margin: 0.3rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      padding: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .top-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin: 1rem auto;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      max-width: 1200px;
+      padding: 0 1.5rem;
+    }
+
+    .pedido-info {
+      background-color: white;
+      padding: 0.8rem;
+      margin: 1rem auto;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      border: 2px dashed var(--primary-color);
+      max-width: 1200px;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+
+    /* Estilos para sección de ingredientes */
+    .ingredientes-container {
+      background-color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .ingredientes-container h2 {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--secondary-color);
+      padding-bottom: 0.5rem;
+      margin-top: 0;
+    }
+
+    .tabla-ingredientes {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .tabla-ingredientes th {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.5rem;
+      text-align: left;
+    }
+
+    .tabla-ingredientes td {
+      padding: 0.5rem;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .tabla-ingredientes tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .action-buttons {
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    /* Estilos para sección de preparación */
+    .preparacion-container {
+      background-color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .preparacion-container h2 {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--secondary-color);
+      padding-bottom: 0.5rem;
+      margin-top: 0;
+    }
+
+    .tiempo-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 1.5rem 0;
+    }
+
+    .tiempo-box {
+      text-align: center;
+      padding: 1rem;
+      border: 2px solid var(--secondary-color);
+      border-radius: 8px;
+      width: 45%;
+    }
+
+    .tiempo-label {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+
+    .tiempo-valor {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .cronometro-container {
+      text-align: center;
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background-color: #f9f3e9;
+      border-radius: 8px;
+    }
+
+    .cronometro {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin: 1rem 0;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      border-top: 5px solid var(--accent-color);
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+
+    .modal-btn {
+      padding: 0.5rem 1.5rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .top-buttons {
+        flex-direction: column;
+      }
+
+      .header-content {
+        flex-direction: column;
+      }
+
+      .logo-header {
+        margin-right: 0;
+        margin-bottom: 1rem;
+      }
+      
+      .tiempo-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .tiempo-box {
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-container">
+    <div class="header-content">
+      <img src="/src/assets/image/pizzaLogo.png" alt="PizzaPlanet Logo" class="logo-header" />
+      <div>
+        <div class="titulo">PIZZAPLANET // ÁREA DE COCINA</div>
+        <div class="subtitulo">Cada rebanada es un sabor a perfección</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="top-buttons">
+    <button id="btn-consultar-pedido" class="btn">CONSULTAR ORDEN DEL PEDIDO</button>
+    <a href="control.html" class="btn">VOLVER A CONTROL</a>
+    <a href="/index.html" class="btn">REGRESAR AL MENÚ</a>
+    <a href="/login.html" class="btn">CERRAR SESIÓN</a>
+  </div>
+
+  <div class="pedido-info">
+    Orden del pedido: <strong id="numero-pedido">078PZNTU54A</strong>
+  </div>
+
+  <div class="grid-container">
+    <!-- Sección Ingredientes -->
+    <section class="ingredientes-container">
+      <h2>CONSULTAR ORDEN DEL PEDIDO</h2>
+      
+      <table class="tabla-ingredientes">
+        <thead>
+          <tr>
+            <th>Ingrediente</th>
+            <th>Tipo</th>
+            <th>Check</th>
+          </tr>
+        </thead>
+        <tbody id="lista-ingredientes">
+          <!-- Los ingredientes se cargarán dinámicamente -->
+        </tbody>
+      </table>
+      
+      <div class="action-buttons">
+        <button id="btn-registrar-especificaciones" class="btn">Registrar especificaciones</button>
+      </div>
+    </section>
+
+    <!-- Sección Preparación -->
+    <section class="preparacion-container">
+      <h2>PREPARACIÓN</h2>
+      
+      <div class="tiempo-container">
+        <div class="tiempo-box">
+          <div class="tiempo-label">INICIAR</div>
+          <div id="hora-inicio" class="tiempo-valor">--:--:--</div>
+        </div>
+        
+        <div class="tiempo-box">
+          <div class="tiempo-label">FINALIZAR</div>
+          <div id="hora-fin" class="tiempo-valor">--:--:--</div>
+        </div>
+      </div>
+      
+      <div class="cronometro-container">
+        <div class="tiempo-label">TIEMPO TRANSCURRIDO</div>
+        <div id="cronometro" class="cronometro">00:00:00</div>
+        <div>
+          <button id="btn-iniciar" class="btn">INICIAR PREPARACIÓN</button>
+          <button id="btn-finalizar" class="btn">FINALIZAR PREPARACIÓN</button>
+        </div>
+      </div>
+      
+      <div class="action-buttons">
+        <button id="btn-entregar" class="btn">Entregada al repartidor</button>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    &copy; 2025 PIZZAPLANET - Todos los derechos reservados
+  </footer>
+
+  <script>
+    // Función para obtener ingredientes para cocina de sessionStorage
+    function obtenerIngredientesParaCocina() {
+      return JSON.parse(sessionStorage.getItem('ingredientesParaCocina')) || [];
+    }
+
+    // Función para mostrar los ingredientes en la tabla
+    function renderizarIngredientes() {
+      const ingredientes = obtenerIngredientesParaCocina();
+      const tbody = document.getElementById('lista-ingredientes');
+      
+      if (ingredientes.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align: center;">No hay ingredientes registrados</td></tr>`;
+        return;
+      }
+      
+      tbody.innerHTML = '';
+      
+      ingredientes.forEach(ingrediente => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${ingrediente.nombre.charAt(0).toUpperCase() + ingrediente.nombre.slice(1)}</td>
+          <td>${ingrediente.tipo ? ingrediente.tipo.charAt(0).toUpperCase() : '-'}</td>
+          <td><input type="checkbox" class="check-ingrediente"></td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Variables para el cronómetro
+    let cronometroInterval;
+    let segundosTranscurridos = 0;
+    let horaInicio = null;
+
+    // Función para actualizar el cronómetro
+    function actualizarCronometro() {
+      segundosTranscurridos++;
+      
+      const horas = Math.floor(segundosTranscurridos / 3600);
+      const minutos = Math.floor((segundosTranscurridos % 3600) / 60);
+      const segundos = segundosTranscurridos % 60;
+      
+      document.getElementById('cronometro').textContent = 
+        `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+    }
+
+    // Función para mostrar modales
+    function mostrarPopup(mensaje, tipo = "success") {
+      const overlay = document.createElement("div");
+      overlay.className = "modal-overlay";
+      
+      const modal = document.createElement("div");
+      modal.className = "modal-content";
+      modal.innerHTML = `
+        <div class="modal-title">${tipo === "error" ? "¡Atención!" : "¡Éxito!"}</div>
+        <p>${mensaje}</p>
+        <button class="btn modal-btn" onclick="this.closest('.modal-overlay').remove()">
+          Aceptar
+        </button>
+      `;
+      
+      if (tipo === "error") {
+        modal.style.borderTopColor = "#dc3545";
+      }
+      
+      overlay.appendChild(modal);
+      document.body.appendChild(overlay);
+    }
+
+    // Inicializar la página
+    document.addEventListener('DOMContentLoaded', () => {
+      // Cargar número de pedido de sessionStorage si existe
+      const numeroPedido = sessionStorage.getItem('numeroPedido') || '078PZNTU54A';
+      document.getElementById('numero-pedido').textContent = numeroPedido;
+      
+      // Renderizar los ingredientes para cocina
+      renderizarIngredientes();
+      
+      // Botón Consultar Pedido
+      document.getElementById('btn-consultar-pedido').addEventListener('click', () => {
+        mostrarPopup("Detalles del pedido " + numeroPedido + " cargados correctamente.");
+      });
+      
+      // Botón Iniciar Preparación
+      document.getElementById('btn-iniciar').addEventListener('click', () => {
+        if (cronometroInterval) {
+          mostrarPopup("La preparación ya está en curso", "error");
+          return;
+        }
+        
+        // Guardar hora de inicio
+        const ahora = new Date();
+        horaInicio = ahora;
+        document.getElementById('hora-inicio').textContent = 
+          ahora.getHours().toString().padStart(2, '0') + ':' + 
+          ahora.getMinutes().toString().padStart(2, '0') + ':' + 
+          ahora.getSeconds().toString().padStart(2, '0');
+        
+        // Iniciar cronómetro
+        segundosTranscurridos = 0;
+        cronometroInterval = setInterval(actualizarCronometro, 1000);
+        actualizarCronometro();
+        
+        // Deshabilitar botón de iniciar
+        document.getElementById('btn-iniciar').disabled = true;
+        mostrarPopup("Preparación iniciada a las " + document.getElementById('hora-inicio').textContent);
+      });
+      
+      // Botón Finalizar Preparación
+      document.getElementById('btn-finalizar').addEventListener('click', () => {
+        if (!cronometroInterval) {
+          mostrarPopup("La preparación no ha sido iniciada", "error");
+          return;
+        }
+        
+        // Detener cronómetro
+        clearInterval(cronometroInterval);
+        cronometroInterval = null;
+        
+        // Guardar hora de finalización
+        const ahora = new Date();
+        document.getElementById('hora-fin').textContent = 
+          ahora.getHours().toString().padStart(2, '0') + ':' + 
+          ahora.getMinutes().toString().padStart(2, '0') + ':' + 
+          ahora.getSeconds().toString().padStart(2, '0');
+        
+        // Habilitar botón de iniciar
+        document.getElementById('btn-iniciar').disabled = false;
+        
+        // Calcular tiempo transcurrido
+        const tiempoTranscurrido = new Date(ahora - horaInicio);
+        mostrarPopup(`Preparación finalizada. Tiempo: ${tiempoTranscurrido.getMinutes()} minutos y ${tiempoTranscurrido.getSeconds()} segundos`);
+      });
+      
+      // Botón Registrar Especificaciones
+      document.getElementById('btn-registrar-especificaciones').addEventListener('click', () => {
+        const checks = document.querySelectorAll('.check-ingrediente');
+        let todosMarcados = true;
+        
+        checks.forEach(check => {
+          if (!check.checked) todosMarcados = false;
+        });
+        
+        if (todosMarcados) {
+          mostrarPopup("Todos los ingredientes han sido verificados y utilizados");
+        } else {
+          mostrarPopup("Especificaciones registradas, pero faltan ingredientes por verificar", "error");
+        }
+      });
+      
+      // Botón Entregada al Repartidor
+      document.getElementById('btn-entregar').addEventListener('click', () => {
+        if (confirm("¿Confirmas que la orden ha sido entregada al repartidor?")) {
+          mostrarPopup("Orden marcada como entregada al repartidor");
+          
+          // Limpiar datos de la orden
+          sessionStorage.removeItem('ingredientesParaCocina');
+          sessionStorage.removeItem('numeroPedido');
+          
+          // Redirigir a la página principal
+          setTimeout(() => {
+            window.location.href = "control.html";
+          }, 2000);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

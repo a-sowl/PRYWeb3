@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PizzaPlanet - Área de Control</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script defer src="../js/control.js"></script>
+  <style>
+    :root {
+      --primary-color: #6b2d10;
+      --secondary-color: #f3c183;
+      --accent-color: #ff8c42;
+      --bg-color: #f8f3ef;
+    }
+    
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--secondary-color);
+      padding: 1rem;
+      border-bottom: 3px solid var(--primary-color);
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .logo-header {
+      width: 80px;
+      height: 80px;
+      margin-right: 1rem;
+    }
+
+    .titulo {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      flex-grow: 1;
+    }
+
+    .subtitulo {
+      font-size: 1rem;
+      font-weight: normal;
+      margin-top: 0.5rem;
+      color: var(--primary-color);
+    }
+
+    .btn {
+      background-color: var(--accent-color);
+      color: white;
+      padding: 0.5rem 1rem;
+      margin: 0.3rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .ingredientes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .ingrediente-card {
+      background-color: white;
+      color: var(--primary-color);
+      padding: 0.8rem;
+      border-radius: 8px;
+      border-left: 4px solid var(--accent-color);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      height: 100%;
+    }
+
+    .ingrediente-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.3rem;
+    }
+
+    .ingrediente-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 0.3rem;
+    }
+
+    .ingrediente-card p {
+      margin: 0 0 0.3rem 0;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .ingrediente-card .btn-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.3rem;
+      margin-top: auto;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      padding: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .lista {
+      background-color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+      height: fit-content;
+    }
+
+    .lista-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .lista-icon {
+      width: 40px;
+      height: 40px;
+      margin-right: 0.5rem;
+    }
+
+    .top-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin: 1rem auto;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      max-width: 1200px;
+      padding: 0 1.5rem;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1.5rem;
+      gap: 0.5rem;
+    }
+
+    .pedido-info {
+      background-color: white;
+      padding: 0.8rem;
+      margin: 1rem auto;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      border: 2px dashed var(--primary-color);
+      max-width: 1200px;
+      font-size: 0.95rem;
+    }
+
+    h2 {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--secondary-color);
+      padding-bottom: 0.5rem;
+      margin-top: 1.2rem;
+      font-size: 1.3rem;
+    }
+
+    h3 {
+      color: var(--primary-color);
+      margin-top: 1rem;
+      font-size: 1.1rem;
+    }
+
+    footer {
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+
+    /* Estilos para la lista de seleccionados */
+    .lista-seleccionada {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .ingrediente-seleccionado {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      background-color: #f3f3f3;
+      border-radius: 5px;
+      font-size: 0.9rem;
+    }
+
+    .ingrediente-seleccionado .nombre {
+      font-weight: bold;
+    }
+
+    .ingrediente-seleccionado .tipo {
+      font-size: 0.8rem;
+      color: #6b2d10;
+    }
+
+    .ingrediente-seleccionado button {
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 0.25rem 0.5rem;
+      cursor: pointer;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      border-top: 5px solid var(--accent-color);
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+
+    .modal-btn {
+      padding: 0.5rem 1.5rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .ingredientes-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .top-buttons {
+        flex-direction: column;
+      }
+
+      .header-content {
+        flex-direction: column;
+      }
+
+      .logo-header {
+        margin-right: 0;
+        margin-bottom: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .ingredientes-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-container">
+    <div class="header-content">
+      <img src="/src/assets/image/pizzaLogo.png" alt="PizzaPlanet Logo" class="logo-header" />
+      <div>
+        <div class="titulo">PIZZAPLANET // ÁREA DE CONTROL</div>
+        <div class="subtitulo">Cada rebanada es un sabor a perfección</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="top-buttons">
+    <button id="btn-consultar-pedido" class="btn">CONSULTAR ORDEN DEL PEDIDO</button>
+    <button id="btn-actualizar-stock" class="btn">ACTUALIZAR STOCK</button>
+    <a href="/index.html" class="btn">REGRESAR AL MENÚ</a>
+    <a href="/login.html" class="btn">CERRAR SESIÓN</a>
+  </div>
+
+  <div class="pedido-info">
+    Orden del pedido: <strong>078PZNTU54A</strong>
+  </div>
+
+  <div class="grid-container">
+    <!-- Sección Ingredientes -->
+    <section class="ingredientes">
+      <h2>SELECCIÓN DE INGREDIENTES</h2>
+
+      <h3>Masas</h3>
+      <div class="ingredientes-grid">
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+            <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Original</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="original">Agregar</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Sartén</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="sarten">Agregar</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Crunchy</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="crunchy">Agregar</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Masa madre</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="masa madre">Agregar</button>
+          </div>
+        </div>
+      </div>
+
+      <h3>Carnes</h3>
+      <div class="ingredientes-grid">
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Pepperoni</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="pepperoni" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="pepperoni" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Carne molida</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="carne molida" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="carne molida" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Chorizo</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="chorizo" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="chorizo" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Salami</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="salami" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="salami" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Jamón</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="jamon" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="jamon" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Tocino</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="tocino" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="tocino" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Pollo</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="pollo" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="pollo" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+      </div>
+
+      <h3>Otros ingredientes</h3>
+      <div class="ingredientes-grid">
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Piña</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="piña" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="piña" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Pimiento</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="pimiento" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="pimiento" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Jalapeños</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="jalapeños" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="jalapeños" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Aceitunas</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="aceitunas" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="aceitunas" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Cebolla</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="cebolla" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="cebolla" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Queso crema</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="queso crema" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="queso crema" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Queso cheddar</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="queso cheddar" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="queso cheddar" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+ <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Queso parmesano</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="queso parmesano" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="queso parmesano" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+            <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Champiñones</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="champiñones" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="champiñones" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+        
+        <div class="ingrediente-card">
+          <div class="ingrediente-header">
+            <img src="/src/assets/image/InStock.png" alt="En stock" class="ingrediente-icon" />
+            <p>Salsa mango habanero</p>
+          </div>
+          <div class="btn-container">
+            <button class="btn" data-ingrediente="salsa mango habanero" data-tipo="normal">Normal</button>
+            <button class="btn" data-ingrediente="salsa mango habanero" data-tipo="extra">Extra</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección Lista -->
+    <section class="lista">
+      <div class="lista-header">
+        <img src="/src/assets/image/Ingredientes.png" alt="Ingredientes" class="lista-icon" />
+        <h2>Ingredientes Seleccionados</h2>
+      </div>
+      
+      <div id="lista-ingredientes" class="lista-seleccionada"></div>
+
+      <div class="action-buttons">
+        <button id="btn-registrar" class="btn">Registrar ingredientes</button>
+        <button id="btn-marcar-salida" class="btn">Marcar salida</button>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    &copy; 2025 PIZZAPLANET - Todos los derechos reservados
+  </footer>
+</body>
+</html>

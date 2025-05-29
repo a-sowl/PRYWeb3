@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PizzaPlanet</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Bootstrap Bundle JS (incluye animaciones y carrusel) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        /* Definición de fuentes personalizadas */
+        @font-face {
+            font-family: 'BebasNeue';
+            src: url('src/assets/font/BebasNeue-Regular.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'LeJourScript';
+            src: url('src/assets/font/LeJourScript.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f3ef;
+            background-image: url('src/assets/image/pizza-bg.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-blend-mode: overlay;
+            background-color: rgba(248, 243, 239, 0.95);
+        }
+
+        .navbar {
+            background-color: #6b2d10;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-nav .nav-link {
+            color: white;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ffc107;
+            transform: translateY(-2px);
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #ffc107;
+        }
+        body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('src/assets/image/pizzaLogo.png');
+    background-size: 40%; /* Tamaño del logo */
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.3; /* 30% de opacidad */
+    z-index: -1; /* Para que quede detrás del contenido */
+    pointer-events: none; /* Para que no interfiera con los clicks */
+}
+
+/* Asegúrate que el fondo del body tenga transparencia */
+body {
+    background-color: rgba(248, 243, 239, 0.7); /* 70% de opacidad */
+    /* ... mantén el resto de tus estilos del body ... */
+}
+
+
+        header {
+            background: linear-gradient(rgba(243, 193, 131, 0.9), rgba(243, 193, 131, 0.7)), 
+                        url('src/assets/image/pizza-header.jpg') center/cover;
+            text-align: center;
+            padding: 4rem 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 5px solid #6b2d10;
+        }
+        
+
+        .titulo-principal {
+            font-family: 'BebasNeue', sans-serif;
+            font-size: 4rem;
+            color: #6b2d10;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.7);
+            letter-spacing: 2px;
+        }
+
+        .slogan {
+            font-family: 'LeJourScript', cursive;
+            font-size: 2.5rem;
+            color: #6b2d10;
+            margin-top: -1rem;
+        }
+
+        .invitacion-section {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 3rem;
+            margin: 2rem auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 800px;
+            border: 3px solid #ff8c42;
+        }
+
+        .invitacion-title {
+            font-family: 'BebasNeue', sans-serif;
+            color: #6b2d10;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-productos {
+            background-color: #ff8c42;
+            color: white;
+            font-weight: bold;
+            padding: 0.8rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            border: none;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+        }
+
+        .btn-productos:hover {
+            background-color: #e07022;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #quienes-somos {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 4rem 2rem;
+            margin: 3rem 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .quienes-title {
+            font-family: 'BebasNeue', sans-serif;
+            color: #6b2d10;
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #ff8c42;
+            padding-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .quienes-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quienes-text {
+            flex: 1;
+            min-width: 300px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .quienes-images {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .quienes-img {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .quienes-img:hover {
+            transform: translateY(-5px);
+        }
+
+        .quienes-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .mision-vision {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .mision, .vision {
+            flex: 1;
+            min-width: 300px;
+            background: #f3c183;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .mision h3, .vision h3 {
+            font-family: 'BebasNeue', sans-serif;
+            color: #6b2d10;
+            font-size: 2rem;
+            border-bottom: 2px solid #6b2d10;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background-color: #6b2d10;
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            text-align: left;
+        }
+
+        .footer-section h3 {
+            font-family: 'BebasNeue', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #f3c183;
+            border-bottom: 2px solid #f3c183;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .contact-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #f3c183;
+            color: #6b2d10;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background-color: #ff8c42;
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .carousel-item img {
+            max-height: 500px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Carrusel de promociones -->
+    <div id="promoCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="src/assets/image/promocion1.png" class="d-block w-100" alt="Promoción 1">
+            </div>
+            <div class="carousel-item">
+                <img src="src/assets/image/promocion2.jpg" class="d-block w-100" alt="Promoción 2">
+            </div>
+            <div class="carousel-item">
+                <img src="src/assets/image/promocion3.jpg" class="d-block w-100" alt="Promoción 3">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3 sticky-top">
+        <a class="navbar-brand" href="#">PizzaPlanet</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" href="#quienes-somos">¿Quiénes somos?</a></li>
+                <li class="nav-item"><a class="nav-link" href="#productos">Productos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contacto">Contáctanos</a></li>
+            </ul>
+    
+            <!-- Este div se mostrará solo si está logueado -->
+            <ul class="navbar-nav" id="menuEmpleado" style="display: none;">
+                <li class="nav-item"><a class="nav-link" href="src/pages/control.html">Área de Control</a></li>
+                <li class="nav-item"><a class="nav-link" href="src/pages/cocina.html">Área de Cocina</a></li>
+                <li class="nav-item"><a class="nav-link" href="src/pages/entregas.html">Área de Entregas</a></li>
+                <li class="nav-item"><a class="nav-link" href="src/pages/almacen.html">Área de Almacén</a></li>
+                <li class="nav-item"><a class="nav-link text-danger" href="#" id="logoutBtn">Cerrar sesión</a></li>
+            </ul>
+    
+            <!-- Botón para loguearse si no está logueado -->
+            <ul class="navbar-nav" id="menuPublico">
+                <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Header -->
+    <header id="inicio">
+        <div class="container">
+            <h1 class="titulo-principal">Bienvenido a PizzaPlanet</h1>
+            <p class="slogan">Cada rebanada es un sabor a perfección</p>
+        </div>
+    </header>
+
+    <!-- Sección de invitación a productos -->
+    <section class="container invitacion-section" id="productos">
+        <h2 class="invitacion-title">¡Descubre nuestras deliciosas creaciones!</h2>
+        <p class="lead">En PizzaPlanet, cada pizza es una obra maestra culinaria preparada con los ingredientes más frescos y amor auténtico.</p>
+        <p>Desde nuestras clásicas pizzas italianas hasta nuestras creaciones gourmet, tenemos algo para satisfacer todos los antojos. ¿Listo para un viaje de sabores inolvidables?</p>
+        
+        <div class="d-flex justify-content-center">
+            <a href="/src/pages/productos.html" class="btn btn-productos">
+                <i class="bi bi-egg-fried me-2"></i> Mostrar Productos
+            </a>
+        </div>
+    </section>
+
+    <!-- Sección Quiénes Somos -->
+    <section id="quienes-somos" class="container">
+        <h2 class="quienes-title">¿Quiénes Somos?</h2>
+        
+        <div class="quienes-content">
+            <div class="quienes-text">
+                <p>En PizzaPlanet, no solo hacemos pizzas, creamos experiencias memorables. Fundada en 2010 por un apasionado chef italiano, nuestra misión ha sido siempre llevar la auténtica pizza italiana a cada hogar con un toque innovador.</p>
+                
+                <p>Nuestra filosofía se basa en tres pilares fundamentales:</p>
+                <ul>
+                    <li><strong>Calidad Premium:</strong> Seleccionamos los mejores ingredientes locales e importados.</li>
+                    <li><strong>Innovación Constante:</strong> Creamos nuevas recetas que sorprenden a nuestros clientes.</li>
+                    <li><strong>Pasión por el Servicio:</strong> Cada cliente es parte de nuestra familia PizzaPlanet.</li>
+                </ul>
+                
+                <p>Con más de 10 años de experiencia, hemos servido más de un millón de pizzas y hemos recibido múltiples premios por nuestra calidad y servicio.</p>
+            </div>
+            
+            <div class="quienes-images">
+                <div class="quienes-img">
+                    <img src="src/assets/image/QuienesSomos2.jpg" alt="Nuestro equipo de chefs">
+                    <div class="p-3 bg-light text-center">Nuestro equipo de chefs apasionados</div>
+                </div>
+                <div class="quienes-img">
+                    <img src="src/assets/image/QuienesSomos1.jpg" alt="Nuestra pizza">
+                    <div class="p-3 bg-light text-center">Prueba nustras diferentes pizzas hechas con amor y pasión</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mision-vision">
+            <div class="mision">
+                <h3>Misión</h3>
+                <p>Llevar la auténtica experiencia de la pizza italiana a cada rincón, utilizando ingredientes de la más alta calidad y técnicas tradicionales, mientras innovamos constantemente para sorprender a nuestros clientes.</p>
+            </div>
+            
+            <div class="vision">
+                <h3>Visión</h3>
+                <p>Convertirnos en la pizzería de referencia a nivel nacional, reconocida por nuestra excelencia culinaria, servicio excepcional y compromiso con la comunidad, expandiendo nuestra familia PizzaPlanet a nuevas ciudades.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <footer id="contacto">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contáctanos</h3>
+                <div class="contact-info">
+                    <p><i class="bi bi-geo-alt-fill me-2"></i> Av. Principal #123, Ciudad</p>
+                    <p><i class="bi bi-telephone-fill me-2"></i> Tel: 123-456-7890</p>
+                    <p><i class="bi bi-envelope-fill me-2"></i> contacto@pizzaplanet.com</p>
+                    <p><i class="bi bi-clock-fill me-2"></i> Horario: Lunes a Domingo 11:00 AM - 10:00 PM</p>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Síguenos</h3>
+                <p>Conéctate con nosotros en redes sociales:</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="bi bi-tiktok"></i></a>
+                    <a href="#" class="social-icon"><i class="bi bi-youtube"></i></a>
+                </div>
+                
+                <div class="mt-4">
+                    <h4>Descarga nuestra app</h4>
+                    <div class="d-flex gap-2 mt-2">
+                        <a href="#" class="btn btn-outline-light">
+                            <i class="bi bi-google-play me-1"></i> Play Store
+                        </a>
+                        <a href="#" class="btn btn-outline-light">
+                            <i class="bi bi-apple me-1"></i> App Store
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Newsletter</h3>
+                <p>Suscríbete para recibir promociones exclusivas:</p>
+                <div class="input-group mb-3">
+                    <input type="email" class="form-control" placeholder="Tu correo electrónico">
+                    <button class="btn btn-warning" type="button">Suscribir</button>
+                </div>
+                <p class="small">Al suscribirte aceptas recibir comunicaciones promocionales de PizzaPlanet.</p>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>PizzaPlanet © 2025 | Todos los derechos reservados</p>
+            <p class="small">Cada rebanada es un sabor a perfección</p>
+        </div>
+    </footer>
+
+    <script>
+        const myCarousel = document.querySelector('#promoCarousel');
+        const carousel = new bootstrap.Carousel(myCarousel, {
+            interval: 4000, // tiempo entre imágenes (ms)
+            ride: 'carousel',
+            pause: false, // no se detiene al pasar el mouse
+            wrap: true
+        });
+    </script>
+
+    <script>
+        // Checar si está logueado
+        const logueado = sessionStorage.getItem('logueado');
+
+        const menuEmpleado = document.getElementById('menuEmpleado');
+        const menuPublico = document.getElementById('menuPublico');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        if (logueado === 'true') {
+            menuEmpleado.style.display = 'flex';
+            menuPublico.style.display = 'none';
+        }
+
+        // Cerrar sesión
+        logoutBtn?.addEventListener('click', () => {
+            sessionStorage.removeItem('logueado');
+            window.location.reload();
+        });
+
+        // Smooth scrolling para los enlaces del menú
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

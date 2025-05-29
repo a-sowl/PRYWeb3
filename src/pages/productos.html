@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos - PizzaPlanet</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #6b2d10;
+            --secondary-color: #f3c183;
+            --accent-color: #ff8c42;
+            --bg-color: #f8f3ef;
+            --success-color: #28a745;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .product-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-img {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-title {
+            font-family: 'BebasNeue', sans-serif;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+
+        .product-price {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .btn-add {
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-customize {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .cart-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 20px;
+        }
+
+        .cart-title {
+            font-family: 'BebasNeue', sans-serif;
+            color: var(--primary-color);
+            font-size: 2rem;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+
+        .cart-item {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .cart-total {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: var(--primary-color);
+        }
+
+        .btn-checkout {
+            background-color: var(--success-color);
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 10px;
+        }
+
+        /* Estilos para el modal de pago */
+        .payment-method {
+            cursor: pointer;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .payment-method:hover, .payment-method.active {
+            border-color: var(--accent-color);
+            background-color: rgba(255, 140, 66, 0.1);
+        }
+
+        .payment-method i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .card-details {
+            display: none;
+        }
+
+        .terms-link {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <img src="/src/assets/image/pizzaLogo.png" alt="PizzaPlanet Logo">
+                PizzaPlanet
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#quienes-somos">¿Quiénes somos?</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="productos.html">Productos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#contacto">Contáctanos</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-light py-5">
+        <div class="container text-center">
+            <h1 class="display-4" style="font-family: 'BebasNeue', sans-serif; color: var(--primary-color);">NUESTRAS DELICIOSAS PIZZAS</h1>
+            <p class="lead" style="font-family: 'LeJourScript', cursive; color: var(--primary-color);">Cada rebanada es un sabor a perfección</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <div class="row">
+            <!-- Productos -->
+            <div class="col-lg-8">
+                <div class="row">
+                    <!-- Pizza Pepperoni -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card product-card h-100">
+                            <img src="/src/assets/image/Pepperoni.png" class="card-img-top product-img" alt="Pizza Pepperoni">
+                            <div class="card-body">
+                                <h3 class="card-title product-title">Pizza Pepperoni</h3>
+                                <p class="card-text">Deliciosa pizza con extra pepperoni y queso mozzarella derretido.</p>
+                                <p class="product-price">$120.00</p>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-add btn-lg" onclick="addToCart('Pizza Pepperoni', 120)">
+                                        <i class="bi bi-cart-plus"></i> Agregar
+                                    </button>
+                                    <button class="btn btn-customize btn-lg" data-bs-toggle="modal" data-bs-target="#customizeModal">
+                                        <i class="bi bi-gear"></i> Personalizar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pizza de Queso -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card product-card h-100">
+                            <img src="/src/assets/image/Cheese.png" class="card-img-top product-img" alt="Pizza de Queso">
+                            <div class="card-body">
+                                <h3 class="card-title product-title">Pizza de Queso</h3>
+                                <p class="card-text">Clásica pizza con una mezcla de cuatro quesos premium.</p>
+                                <p class="product-price">$100.00</p>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-add btn-lg" onclick="addToCart('Pizza de Queso', 100)">
+                                        <i class="bi bi-cart-plus"></i> Agregar
+                                    </button>
+                                    <button class="btn btn-customize btn-lg" data-bs-toggle="modal" data-bs-target="#customizeModal">
+                                        <i class="bi bi-gear"></i> Personalizar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pizza Hawaiana -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card product-card h-100">
+                            <img src="/src/assets/image/Hawaiana.png" class="card-img-top product-img" alt="Pizza Hawaiana">
+                            <div class="card-body">
+                                <h3 class="card-title product-title">Pizza Hawaiana</h3>
+                                <p class="card-text">La combinación perfecta de jamón dulce y piña caramelizada.</p>
+                                <p class="product-price">$160.00</p>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-add btn-lg" onclick="addToCart('Pizza Hawaiana', 160)">
+                                        <i class="bi bi-cart-plus"></i> Agregar
+                                    </button>
+                                    <button class="btn btn-customize btn-lg" data-bs-toggle="modal" data-bs-target="#customizeModal">
+                                        <i class="bi bi-gear"></i> Personalizar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pizza Mexicana -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card product-card h-100">
+                            <img src="/src/assets/image/Mexicana.png" class="card-img-top product-img" alt="Pizza Mexicana">
+                            <div class="card-body">
+                                <h3 class="card-title product-title">Pizza Mexicana</h3>
+                                <p class="card-text">Picante y sabrosa con chorizo, jalapeños y salsa especial.</p>
+                                <p class="product-price">$150.00</p>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-add btn-lg" onclick="addToCart('Pizza Mexicana', 150)">
+                                        <i class="bi bi-cart-plus"></i> Agregar
+                                    </button>
+                                    <button class="btn btn-customize btn-lg" data-bs-toggle="modal" data-bs-target="#customizeModal">
+                                        <i class="bi bi-gear"></i> Personalizar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pizza Napolitana -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card product-card h-100">
+                            <img src="/src/assets/image/Napolitana.png" class="card-img-top product-img" alt="Pizza Napolitana">
+                            <div class="card-body">
+                                <h3 class="card-title product-title">Pizza Napolitana</h3>
+                                <p class="card-text">Auténtica pizza italiana con albahaca fresca y tomates cherry.</p>
+                                <p class="product-price">$180.00</p>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-add btn-lg" onclick="addToCart('Pizza Napolitana', 180)">
+                                        <i class="bi bi-cart-plus"></i> Agregar
+                                    </button>
+                                    <button class="btn btn-customize btn-lg" data-bs-toggle="modal" data-bs-target="#customizeModal">
+                                        <i class="bi bi-gear"></i> Personalizar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pizza Extravaganza -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card product-card h-100">
+                            <img src="/src/assets/image/Extravaganza.png" class="card-img-top product-img" alt="Pizza Extravaganza">
+                            <div class="card-body">
+                                <h3 class="card-title product-title">Pizza Extravaganza</h3>
+                                <p class="card-text">Para los más hambrientos, con todos nuestros ingredientes premium.</p>
+                                <p class="product-price">$200.00</p>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-add btn-lg" onclick="addToCart('Pizza Extravaganza', 200)">
+                                        <i class="bi bi-cart-plus"></i> Agregar
+                                    </button>
+                                    <button class="btn btn-customize btn-lg" data-bs-toggle="modal" data-bs-target="#customizeModal">
+                                        <i class="bi bi-gear"></i> Personalizar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carrito de Compras -->
+            <div class="col-lg-4">
+                <div class="cart-container">
+                    <h2 class="cart-title mb-4"><i class="bi bi-cart3"></i> Tu Pedido</h2>
+                    <div id="cart-items">
+                        <p class="text-muted">Tu carrito está vacío</p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <h5 class="cart-total">Total: $<span id="cart-total">0.00</span></h5>
+                    </div>
+                    <button class="btn btn-checkout w-100 mt-3" id="checkout-btn" disabled data-bs-toggle="modal" data-bs-target="#paymentModal">
+                        <i class="bi bi-credit-card"></i> Realizar Pedido
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Personalización -->
+    <div class="modal fade" id="customizeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Personaliza tu pizza</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Tamaño:</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="size" id="sizeSmall" checked>
+                                <label class="form-check-label" for="sizeSmall">Individual (+$0)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="size" id="sizeMedium">
+                                <label class="form-check-label" for="sizeMedium">Mediana (+$30)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="size" id="sizeLarge">
+                                <label class="form-check-label" for="sizeLarge">Familiar (+$60)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Ingredientes extra:</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="extraCheese">
+                                <label class="form-check-label" for="extraCheese">Queso extra (+$15)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="extraPepperoni">
+                                <label class="form-check-label" for="extraPepperoni">Pepperoni extra (+$20)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="extraChamp">
+                                <label class="form-check-label" for="extraChamp">Champiñones (+$10)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Aplicar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Pago -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Completa tu pedido</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="payment-form">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h6>Información personal</h6>
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Nombre completo</label>
+                                    <input type="text" class="form-control" id="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Teléfono</label>
+                                    <input type="tel" class="form-control" id="phone" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Correo electrónico</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">Dirección de entrega</label>
+                                    <textarea class="form-control" id="address" rows="3" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Método de pago</h6>
+                                <div class="row">
+                                    <div class="col-6 mb-3">
+                                        <div class="payment-method text-center" onclick="selectPayment('cash')">
+                                            <i class="bi bi-cash-stack"></i>
+                                            <p>Efectivo</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <div class="payment-method text-center active" onclick="selectPayment('card')">
+                                            <i class="bi bi-credit-card"></i>
+                                            <p>Tarjeta</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="card-details" class="card-details">
+                                    <div class="mb-3">
+                                        <label for="card-number" class="form-label">Número de tarjeta</label>
+                                        <input type="text" class="form-control" id="card-number" placeholder="1234 5678 9012 3456">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="card-expiry" class="form-label">Fecha de expiración</label>
+                                            <input type="text" class="form-control" id="card-expiry" placeholder="MM/AA">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="card-cvv" class="form-label">CVV</label>
+                                            <input type="text" class="form-control" id="card-cvv" placeholder="123">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="card-name" class="form-label">Nombre en la tarjeta</label>
+                                        <input type="text" class="form-control" id="card-name">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="checkbox" id="terms" required>
+                                    <label class="form-check-label" for="terms">
+                                        Acepto los <a href="#" class="terms-link">términos y condiciones</a>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="submitOrder()">Confirmar Pedido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-0">PizzaPlanet © 2025 | Cada rebanada es un sabor a perfección</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Carrito de compras
+        let cart = [];
+        
+        // Función para agregar productos al carrito
+        function addToCart(name, price) {
+            // Buscar si el producto ya está en el carrito
+            const existingItem = cart.find(item => item.name === name);
+            
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({
+                    name: name,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            
+            updateCart();
+            
+            // Mostrar notificación
+            const toast = document.createElement('div');
+            toast.className = 'position-fixed bottom-0 end-0 p-3';
+            toast.innerHTML = `
+                <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-success text-white">
+                        <strong class="me-auto">¡Agregado al carrito!</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${name} ha sido agregado a tu pedido.
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            
+            // Eliminar la notificación después de 3 segundos
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // Función para actualizar el carrito
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p class="text-muted">Tu carrito está vacío</p>';
+                cartTotal.textContent = '0.00';
+                checkoutBtn.disabled = true;
+                return;
+            }
+            
+            let itemsHtml = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                itemsHtml += `
+                    <div class="cart-item">
+                        <div class="d-flex justify-content-between">
+                            <span>${item.name} x${item.quantity}</span>
+                            <span>$${itemTotal.toFixed(2)}</span>
+                        </div>
+                        <div class="d-flex justify-content-end mt-1">
+                            <button class="btn btn-sm btn-outline-danger me-2" onclick="decreaseQuantity('${item.name}')">
+                                <i class="bi bi-dash"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-success" onclick="increaseQuantity('${item.name}')">
+                                <i class="bi bi-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            cartItems.innerHTML = itemsHtml;
+            cartTotal.textContent = total.toFixed(2);
+            checkoutBtn.disabled = false;
+        }
+        
+        // Funciones para modificar cantidades
+        function increaseQuantity(name) {
+            const item = cart.find(item => item.name === name);
+            if (item) {
+                item.quantity++;
+                updateCart();
+            }
+        }
+        
+        function decreaseQuantity(name) {
+            const itemIndex = cart.findIndex(item => item.name === name);
+            if (itemIndex !== -1) {
+                if (cart[itemIndex].quantity > 1) {
+                    cart[itemIndex].quantity--;
+                } else {
+                    cart.splice(itemIndex, 1);
+                }
+                updateCart();
+            }
+        }
+        
+        // Funciones para el modal de pago
+        function selectPayment(method) {
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            event.currentTarget.classList.add('active');
+            
+            const cardDetails = document.getElementById('card-details');
+            if (method === 'card') {
+                cardDetails.style.display = 'block';
+            } else {
+                cardDetails.style.display = 'none';
+            }
+        }
+        
+        function submitOrder() {
+            const form = document.getElementById('payment-form');
+            if (form.checkValidity()) {
+                // Aquí iría la lógica para procesar el pedido
+                alert('¡Pedido realizado con éxito! Gracias por tu compra.');
+                
+                // Limpiar carrito
+                cart = [];
+                updateCart();
+                
+                // Cerrar modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
+                modal.hide();
+            } else {
+                form.reportValidity();
+            }
+        }
+        
+        // Inicializar el modal de pago para mostrar tarjeta por defecto
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('card-details').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
