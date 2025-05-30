@@ -1,127 +1,196 @@
-import DataManager from "./dataManager.js";
+import DataManager from "./datamanager.js";
 const { jsPDF } = window.jspdf;
 
-const dataManager = new DataManager("Contribuciones");
-async function generarReportePDF(contribuciones) {
+document.addEventListener("DOMContentLoaded", () => {
+    const btnGenerar = document.getElementById("btnGenerarPDF");
+    btnGenerar.addEventListener("click", () => {
+        generarReportePDF();
+    });
+});
+
+async function generarReportePDF() {
+    // 1. Creamos la instancia de jsPDF
     const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "letter" });
 
-    const urlIzquierda = "/src/assets/image/logo itvo.png";
-    const urlDerecha = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Tecnologico_Nacional_de_Mexico.svg/1280px-Tecnologico_Nacional_de_Mexico.svg.png";
+    // 2. Leemos todos los productos del DataManager
+    const dataManager = new DataManager("productos");
+    const productos = dataManager.readData(); // Array de objetos Producto
 
+    // 3. Definimos las URLs de los logos
+    const urlIzquierda = "/src/assets/image/pizzaLogo.png";
+    const urlDerecha = "/src/assets/image/pizzaLogo.png";
+
+    // 4. Cargar las dos imágenes en Base64
+    let imgIzqBase64 = "";
+    let imgDerBase64 = "";
     try {
-        const imgIzq = await cargarImagenBase64(urlIzquierda);
-        const imgDer = await cargarImagenBase64(urlDerecha);
-
-        // ENCABEZADO
-        doc.addImage(imgIzq, "JPEG", 10, 10, 25, 25);
-        doc.addImage(imgDer, "JPEG", 155, 10, 50, 25);
-        doc.setFont("Helvetica", "bold");
-        doc.setFontSize(18);
-        doc.text("Reporte de Contribuciones", 105, 20, { align: "center" });
-
-
-
-        // TABLA
-        const cuerpo = contribuciones.map(c => [
-            c.id,
-            c.titulo,
-            c.descripcion,
-            c.categoria,
-            c.fecha,
-            c.autor,
-            c.nombreArchivo || ""
-        ]);
-
-        doc.autoTable({
-            head: [["ID", "Título", "Descripción", "Categoría", "Fecha", "Autor", "Archivo"]],
-            body: cuerpo,
-            startY: 40,
-            styles: { fontSize: 8 },
-            headStyles: {
-                fillColor: [0, 102, 204],
-                textColor: 255,
-                halign: "center"
-            },
-
-
-        });
-
-        doc.addPage();
-
-        // ENCABEZADO
-        doc.addImage(imgIzq, "JPEG", 10, 10, 25, 25);
-        doc.addImage(imgDer, "JPEG", 155, 10, 50, 25);
-        doc.setFont("Helvetica", "bold");
-        doc.setFontSize(18);
-        doc.text("Grafica  de Contribuciones", 105, 20, { align: "center" });
-
-
-
-        let posX = 20;
-        const posY = 80;
-        const anchoBarra = 20;
-        const espacio = 15;
-        const alturaMax = 60;
-
-        // GRÁFICA DE BARRAS
-        const conteo = {};
-        for (const item of contribuciones) {
-            conteo[item.categoria] = (conteo[item.categoria] || 0) + 1;
-        }
-
-        const valores = Object.values(conteo);
-        const max = Math.max(...valores);
-
-        const colores = [
-            [50, 150, 255],
-            [255, 99, 132],
-            [255, 206, 86],
-            [75, 192, 192],
-            [153, 102, 255],
-            [255, 159, 64],
-            [100, 200, 100],
-            [200, 100, 200]
-        ];
-
-        let colorIndex = 0;
-
-        for (const [cat, cantidad] of Object.entries(conteo)) {
-            const altura = (cantidad / max) * alturaMax;
-            const color = colores[colorIndex % colores.length];
-            doc.setFillColor(...color);
-            doc.rect(posX, posY + alturaMax - altura, anchoBarra, altura, "F");
-
-            doc.setFontSize(10);
-            doc.setTextColor(0);
-            doc.text(${cat}, posX + anchoBarra / 2, posY + alturaMax + 5, { align: "center" });
-            doc.text(${cantidad}, posX + anchoBarra / 2, posY + alturaMax - altura - 2, { align: "center" });
-
-            posX += anchoBarra + espacio;
-            colorIndex++;
-        }
-
-        const totalPages = doc.getNumberOfPages();
-        for (let i = 1; i <= totalPages; i++) {
-            doc.setPage(i);
-            doc.setFontSize(10);
-            doc.setTextColor(150);
-            doc.text(
-                Página ${i} de ${totalPages},
-                doc.internal.pageSize.getWidth() / 2,
-                doc.internal.pageSize.getHeight() - 10,
-                { align: "center" }
-            );
-        }
-
-        doc.save("reporte_contribuciones.pdf");
+        imgIzqBase64 = await cargarImagenBase64(urlIzquierda);
+        imgDerBase64 = await cargarImagenBase64(urlDerecha);
     } catch (err) {
-        console.error("Error generando PDF:", err);
+        console.warn("No se pudo cargar alguna imagen de logo:", err);
     }
 
+    // 5. Dibujamos encabezado en la PRIMERA PÁGINA:
+    if (imgIzqBase64) {
+        doc.addImage(imgIzqBase64, "PNG", 10, 10, 25, 25);
+    }
+    if (imgDerBase64) {
+        doc.addImage(imgDerBase64, "PNG", 175, 10, 25, 25);
+    }
+
+    doc.setFont("Helvetica", "bold");
+    doc.setFontSize(18);
+    doc.setTextColor(33, 37, 41);
+    doc.text("Reporte de Productos", doc.internal.pageSize.getWidth() / 2, 22, {
+        align: "center",
+    });
+
+    // 6. Preparamos la tabla con autoTable
+    const encabezados = [
+        "ID",
+        "Nombre",
+        "Descripción",
+        "Cantidad",
+        "Precio",
+        "Categoría",
+        "Disponibilidad"
+    ];
+
+    const cuerpoTabla = productos.map((p) => [
+        p.id,
+        p.nombre,
+        p.descripcion || "",
+        p.cantidad,
+        `$${parseFloat(p.precio).toFixed(2)}`,
+        obtenerNombreCategoria(p.categoria),
+        obtenerNombreDisponibilidad(p.disponibilidad)
+    ]);
+
+    // 7. Insertamos la tabla a partir de Y = 40 mm
+    doc.autoTable({
+        head: [encabezados],
+        body: cuerpoTabla,
+        startY: 40,
+        styles: { fontSize: 9, cellPadding: 3 },
+        headStyles: {
+            fillColor: [33, 37, 41],
+            textColor: 255,
+            halign: "center",
+            fontStyle: "bold",
+        },
+
+        didDrawPage: function (data) {
+            // Numeración de páginas en cada hoja
+            const pageCount = doc.internal.getNumberOfPages();
+            doc.setFontSize(8);
+            doc.setTextColor(150);
+            doc.text(
+                `Página ${doc.internal.getCurrentPageInfo().pageNumber} de ${pageCount}`,
+                data.settings.margin.left,
+                doc.internal.pageSize.getHeight() - 10
+            );
+        },
+    });
+
+    // 8. FORZAR salto a página 2:
+    doc.addPage();
+
+    // 9. Ahora dibujamos la misma cabecera (opcional) en página 2 si queremos:
+    //    — Si prefieres omitir el encabezado en la segunda página, solo elimina las siguientes líneas:
+    if (imgIzqBase64) {
+        doc.addImage(imgIzqBase64, "PNG", 10, 10, 25, 25);
+    }
+    if (imgDerBase64) {
+        doc.addImage(imgDerBase64, "PNG", 175, 10, 25, 25);
+    }
+    doc.setFont("Helvetica", "bold");
+    doc.setFontSize(18);
+    doc.setTextColor(33, 37, 41);
+    doc.text("Gráfica de Categorías", doc.internal.pageSize.getWidth() / 2, 22, {
+        align: "center",
+    });
+
+    // 10. Dibujamos la gráfica de barras en la PÁGINA 2
+    const conteoCategorias = {};
+    productos.forEach((p) => {
+        conteoCategorias[p.categoria] = (conteoCategorias[p.categoria] || 0) + 1;
+    });
+
+    // Ajustamos la posición vertical de inicio de la gráfica en la página 2:
+    const posY = 40;        // Por ejemplo a 40 mm desde el borde superior
+    let posX = 20;        // Margen izquierdo de 20 mm
+    const anchoBarra = 20;
+    const espacioEntre = 12;
+    const alturaMax = 60;
+    const valores = Object.values(conteoCategorias);
+    const maxValor = valores.length ? Math.max(...valores) : 1;
+
+
+    // Colores para las barras (puedes agregar más si tienes más categorías)
+    const coloresBarras = [
+        [231, 29, 54],    // Rojo
+        [255, 159, 28],   // Amarillo
+        [46, 196, 182],   // Verde agua
+        [0, 123, 255],    // Azul
+        [153, 102, 255],  // Morado
+        [255, 206, 86],   // Amarillo claro
+        [255, 99, 132],   // Rosa
+        [75, 192, 192],   // Verde claro
+    ];
+
+    let colorIndex = 0;
+
+    // Dibujamos cada barra
+    Object.entries(conteoCategorias).forEach(([categoria, cantidad]) => {
+        const altura = (cantidad / maxValor) * alturaMax;
+
+        // Selecciona color para la barra
+        const color = coloresBarras[colorIndex % coloresBarras.length];
+        doc.setFillColor(...color);
+
+        // Dibuja la barra
+        doc.rect(posX, posY + (alturaMax - altura), anchoBarra, altura, "F");
+
+        // Cantidad encima de la barra
+        doc.setFontSize(8);
+        doc.setTextColor(33, 37, 41);
+        doc.text(
+            `${cantidad}`,
+            posX + anchoBarra / 2,
+            posY + (alturaMax - altura) - 2,
+            { align: "center" }
+        );
+
+        // Etiqueta de categoría debajo
+        doc.setFontSize(8);
+        doc.text(
+            categoria,
+            posX + anchoBarra / 2,
+            posY + alturaMax + 5,
+            { align: "center" }
+        );
+
+        posX += anchoBarra + espacioEntre;
+        colorIndex++;
+    });
+
+    // 11. Agregamos numeración de página en la PÁGINA 2
+    const pageCount = doc.internal.getNumberOfPages();
+    doc.setFontSize(8);
+    doc.setTextColor(150);
+    doc.text(
+        `Página 2 de ${pageCount}`,
+    /* margen izquierdo */ 10,
+        doc.internal.pageSize.getHeight() - 10
+    );
+
+    // 12. Finalmente guardamos el PDF
+    doc.save("Reporte_Productos.pdf");
 }
 
+// --- FUNCIONES AUXILIARES ---
 
-function cargarImagenBase64(url) {
+async function cargarImagenBase64(url) {
     return new Promise((resolve, reject) => {
         const img = new Image();
         img.crossOrigin = "anonymous";
@@ -129,11 +198,28 @@ function cargarImagenBase64(url) {
             const canvas = document.createElement("canvas");
             canvas.width = img.width;
             canvas.height = img.height;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0);
-            resolve(canvas.toDataURL("image/jpeg"));
+            canvas.getContext("2d").drawImage(img, 0, 0);
+            resolve(canvas.toDataURL("image/png"));
         };
-        img.onerror = () => reject("Error al cargar imagen.");
-        img.src = url;
-    });
+        img.onerror = () => reject("No se pudo cargar la imagen " + url);
+        img.src = url;
+    });
+}
+
+function obtenerNombreCategoria(clave) {
+    switch (clave) {
+        case "clasicas": return "Pizzas Clásicas";
+        case "especiales": return "Pizzas Especiales";
+        case "bebidas": return "Bebidas";
+        case "postres": return "Postres";
+        default: return clave;
+    }
+}
+
+function obtenerNombreDisponibilidad(valor) {
+    switch (valor) {
+        case "disponible": return "Disponible";
+        case "noDisponible": return "No disponible";
+        default: return valor;
+    }
 }

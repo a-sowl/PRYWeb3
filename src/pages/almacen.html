@@ -1,229 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Almacén - Pizza Planet</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Incluir jsPDF y autoTable -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    <style>
-        /* Estilos de Pizza Planet */
-        :root {
-            --pizza-red: #e71d36;
-            --pizza-yellow: #ff9f1c;
-            --pizza-green: #2ec4b6;
-            --pizza-dark: #011627;
-            --pizza-light: #fdfffc;
-        }
-        
-        @font-face {
-            font-family: 'BebasNeue';
-            src: url('src/assets/font/BebasNeue-Regular.ttf') format('truetype');
-            font-weight: bold;
-            font-style: normal;
-        }
-        
-        @font-face {
-            font-family: 'LeJourScript';
-            src: url('src/assets/font/LeJourScript.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-        
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f8f3ef;
-            background-image: url('src/assets/image/pizza-bg.jpg');
-            background-size: cover;
-            background-attachment: fixed;
-            background-blend-mode: overlay;
-            background-color: rgba(248, 243, 239, 0.95);
-            padding-bottom: 50px;
-        }
-        
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('src/assets/image/pizzaLogo.png');
-            background-size: 40%;
-            background-position: center;
-            background-repeat: no-repeat;
-            opacity: 0.3;
-            z-index: -1;
-            pointer-events: none;
-        }
-        
-        .navbar {
-            background-color: #6b2d10;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-        
-        .navbar-brand {
-            font-family: 'BebasNeue', sans-serif;
-            font-size: 1.8rem;
-            color: #ffc107 !important;
-        }
-        
-        .navbar-nav .nav-link {
-            color: white;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .navbar-nav .nav-link:hover {
-            color: #ffc107;
-            transform: translateY(-2px);
-        }
-        
-        .page-title {
-            font-family: 'BebasNeue', sans-serif;
-            color: #6b2d10;
-            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.7);
-            letter-spacing: 2px;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #ff8c42;
-        }
-        
-        .form-container {
-            background-color: rgba(255, 255, 255, 0.92);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border: 3px solid #ff8c42;
-            margin-bottom: 30px;
-        }
-        
-        .btn-pizza {
-            background-color: #ff8c42;
-            color: white;
-            font-weight: bold;
-            padding: 0.8rem 2rem;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            border: none;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-pizza:hover {
-            background-color: #e07022;
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .btn-action {
-            margin: 0 5px;
-            transition: all 0.2s;
-        }
-        
-        .btn-action:hover {
-            transform: scale(1.1);
-        }
-        
-        .table-container {
-            background-color: rgba(255, 255, 255, 0.92);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border: 3px solid #ff8c42;
-            display: none;
-            margin-top: 20px;
-        }
-        
-        .table-title {
-            font-family: 'BebasNeue', sans-serif;
-            color: #6b2d10;
-            margin-bottom: 20px;
-        }
-        
-        .table-responsive {
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .table thead {
-            background-color: #6b2d10;
-            color: white;
-        }
-        
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(243, 193, 131, 0.2);
-        }
-        
-        .search-container {
-            background-color: rgba(255, 255, 255, 0.85);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            max-width: 350px;
-            display: none;
-            animation: fadeIn 0.5s, fadeOut 0.5s 2.5s;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes fadeOut {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(-20px); }
-        }
-        
-        .pizza-icon {
-            color: #ff8c42;
-            margin-right: 10px;
-        }
-        
-        .form-label {
-            font-weight: 600;
-            color: #6b2d10;
-        }
-        
-        .product-img {
-            max-width: 80px;
-            max-height: 60px;
-            border-radius: 5px;
-            object-fit: cover;
-        }
-        
-        .editing-mode {
-            border: 3px solid #ff8c42;
-            box-shadow: 0 0 15px rgba(255, 140, 66, 0.5);
-        }
-        
-        .btn-cancelar-edicion {
-            background-color: #6c757d;
-            color: white;
-        }
-        
-        .btn-cancelar-edicion:hover {
-            background-color: #5a6268;
-        }
-    </style>
+    <link rel="stylesheet" href="/src/css/almacen.css">
 </head>
+
 <body>
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg navbar-dark">
@@ -256,49 +42,49 @@
     <!-- Contenido principal -->
     <div class="container my-5">
         <h1 class="page-title text-center"><i class="fas fa-warehouse pizza-icon"></i>ALMACÉN DE PRODUCTOS</h1>
-        
+
         <!-- Formulario de alta de productos -->
         <div class="form-container" id="formContainer">
             <form id="frmAltaProducto" class="row g-3 needs-validation" novalidate>
                 <!-- ID producto -->
                 <div class="col-md-4">
                     <label for="txtIDArticulo" class="form-label">ID Producto</label>
-                    <input type="number" class="form-control" id="txtIDArticulo" name="txtIDArticulo"
-                           min="1" required>
+                    <input type="number" class="form-control" id="txtIDArticulo" name="txtIDArticulo" min="1" required>
                     <div class="invalid-feedback">Ingresa un ID válido.</div>
                 </div>
-                
+
                 <!-- Nombre del producto -->
                 <div class="col-md-4">
                     <label for="txtNombre" class="form-label">Nombre del Producto</label>
                     <input type="text" class="form-control" id="txtNombre" name="txtNombre" required>
                     <div class="invalid-feedback">Este campo es obligatorio.</div>
                 </div>
-                
+
                 <!-- Cantidad disponible -->
                 <div class="col-md-4">
-                    <label for="rngCantidad" class="form-label">Cantidad Disponible: <span id="cantidadValue">50</span></label>
-                    <input type="range" class="form-range" id="rngCantidad" name="rngCantidad"
-                           min="1" max="200" value="50" required>
+                    <label for="rngCantidad" class="form-label">Cantidad Disponible: <span
+                            id="cantidadValue">50</span></label>
+                    <input type="range" class="form-range" id="rngCantidad" name="rngCantidad" min="1" max="200"
+                        value="50" required>
                     <div class="invalid-feedback">Selecciona una cantidad.</div>
                 </div>
-                
+
                 <!-- Descripción -->
                 <div class="col-md-6">
                     <label for="txtDescripcion" class="form-label">Descripción</label>
-                    <textarea class="form-control" id="txtDescripcion" name="txtDescripcion"
-                              rows="2" required></textarea>
+                    <textarea class="form-control" id="txtDescripcion" name="txtDescripcion" rows="2"
+                        required></textarea>
                     <div class="invalid-feedback">Describe el producto.</div>
                 </div>
-                
+
                 <!-- Precio -->
                 <div class="col-md-3">
                     <label for="txtPrecio" class="form-label">Precio ($)</label>
-                    <input type="number" class="form-control" id="txtPrecio" name="txtPrecio"
-                           step="0.01" min="0" required>
+                    <input type="number" class="form-control" id="txtPrecio" name="txtPrecio" step="0.01" min="0"
+                        required>
                     <div class="invalid-feedback">Precio inválido.</div>
                 </div>
-                
+
                 <!-- Categoría -->
                 <div class="col-md-3">
                     <label for="cboCategoria" class="form-label">Categoría</label>
@@ -311,37 +97,39 @@
                     </select>
                     <div class="invalid-feedback">Selecciona una categoría.</div>
                 </div>
-                
+
                 <!-- Fecha de registro -->
                 <div class="col-md-3">
                     <label for="dtpFechaRegistro" class="form-label">Fecha de registro</label>
-                    <input type="date" class="form-control" id="dtpFechaRegistro"
-                           name="dtpFechaRegistro" required>
+                    <input type="date" class="form-control" id="dtpFechaRegistro" name="dtpFechaRegistro" required>
                     <div class="invalid-feedback">Selecciona la fecha de registro.</div>
                 </div>
-                
+
                 <!-- Disponibilidad (radio buttons) -->
                 <div class="col-md-3">
                     <label class="form-label">Disponibilidad</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="disponibilidad" id="disponible" value="disponible" checked>
+                        <input class="form-check-input" type="radio" name="disponibilidad" id="disponible"
+                            value="disponible" required>
                         <label class="form-check-label" for="disponible">
                             Disponible
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="disponibilidad" id="noDisponible" value="noDisponible">
+                        <input class="form-check-input" type="radio" name="disponibilidad" id="noDisponible"
+                            value="noDisponible">
                         <label class="form-check-label" for="noDisponible">
                             No disponible
                         </label>
                     </div>
                 </div>
-                
+
                 <!-- Tamaño (checkbox) -->
                 <div class="col-md-3">
                     <label class="form-label">Tamaños disponibles</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="chkPersonal" name="tamanos" value="personal">
+                        <input class="form-check-input" type="checkbox" id="chkPersonal" name="tamanos"
+                            value="personal">
                         <label class="form-check-label" for="chkPersonal">Personal</label>
                     </div>
                     <div class="form-check">
@@ -349,49 +137,53 @@
                         <label class="form-check-label" for="chkMediana">Mediana</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="chkFamiliar" name="tamanos" value="familiar">
+                        <input class="form-check-input" type="checkbox" id="chkFamiliar" name="tamanos"
+                            value="familiar">
                         <label class="form-check-label" for="chkFamiliar">Familiar</label>
                     </div>
                 </div>
-                
+
                 <!-- Imagen del producto -->
                 <div class="col-md-3">
                     <label for="imgProducto" class="form-label">Imagen del Producto</label>
-                    <input type="file" class="form-control" id="imgProducto" name="imgProducto" accept="image/*">
+                    <input type="file" class="form-control" id="imgProducto" name="imgProducto" accept="image/*"
+                        required>
                     <div class="form-text">Opcional. Formatos: jpg, png</div>
                 </div>
-                
+
                 <!-- Botones de acción -->
                 <div class="col-12 mt-4 d-flex justify-content-between">
                     <button class="btn btn-pizza" type="submit">
                         <i class="fas fa-plus-circle me-2"></i>Añadir Producto
                     </button>
-                    <button id="btnCancelarEdicion" class="btn btn-cancelar-edicion" type="button" style="display: none;">
+                    <button id="btnCancelarEdicion" class="btn btn-cancelar-edicion" type="button"
+                        style="display: none;">
                         <i class="fas fa-times-circle me-2"></i>Cancelar Edición
                     </button>
                 </div>
             </form>
         </div>
-        
-        <!-- Notificación de éxito -->
-        <div id="notification" class="notification alert alert-success alert-dismissible fade show" role="alert">
-            <strong><i class="fas fa-check-circle me-2"></i>Éxito!</strong> <span id="notification-message">El producto se ha añadido correctamente</span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        
+
         <!-- Botones de acción -->
         <div class="action-buttons">
-            <button id="btnMostrarBD" class="btn btn-pizza" style="display:none;">
+            <button id="btnMostrarBD" class="btn btn-pizza">
                 <i class="fas fa-database me-2"></i>Ver Base de Datos
             </button>
-            <button id="btnGenerarPDF" class="btn btn-pizza" style="display:none;">
+            <button id="btnGenerarPDF" class="btn btn-pizza">
                 <i class="fas fa-file-pdf me-2"></i>Descargar PDF
             </button>
-            <button id="btnVaciarBD" class="btn btn-pizza btn-danger" style="display:none;">
+            <button id="btnVaciarBD" class="btn btn-pizza btn-danger">
                 <i class="fas fa-trash-alt me-2"></i>Vaciar Almacén
             </button>
         </div>
-        
+
+        <!-- Notificación de éxito -->
+        <div id="notification" class="notification alert alert-success alert-dismissible fade show" role="alert">
+            <strong><i class="fas fa-check-circle me-2"></i>Éxito!</strong> <span id="notification-message">El producto
+                se ha añadido correctamente</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
         <!-- Buscador -->
         <div id="searchSection" class="search-container" style="display:none;">
             <div class="row g-3 align-items-center">
@@ -416,7 +208,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Tabla de productos -->
         <div id="divListaProductos" class="table-container">
             <h3 class="table-title"><i class="fas fa-list pizza-icon"></i>PRODUCTOS EN ALMACÉN</h3>
@@ -427,7 +219,8 @@
                             <th>ID</th>
                             <th>Imagen</th>
                             <th>Nombre</th>
-                            <th>Cant.</th>
+                            <th>Descripción</th>
+                            <th>Cantidad</th>
                             <th>Precio</th>
                             <th>Categoría</th>
                             <th>Disponible</th>
@@ -442,652 +235,38 @@
                 </table>
             </div>
             <div id="noResults" class="alert alert-warning text-center" style="display:none;">
-                <i class="fas fa-exclamation-triangle me-2"></i>No se encontraron productos que coincidan con la búsqueda
+                <i class="fas fa-exclamation-triangle me-2"></i>No se encontraron productos que coincidan con la
+                búsqueda
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar acción</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <span id="confirmModalMessage"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btnModalConfirmar">Aceptar</button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Variables globales
-        let productos = [];
-        let editando = false;
-        let productoEditando = null;
-        let imagenEditando = null;
 
-        // Inicialización al cargar la página
-        document.addEventListener('DOMContentLoaded', () => {
-            // Verificar sesión (simulado)
-            if (!localStorage.getItem('isLoggedIn')) {
-                localStorage.setItem('isLoggedIn', 'true'); // Simulación
-            }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
 
-            // Cargar productos desde localStorage
-            cargarProductosDesdeStorage();
-
-            // Configurar evento para el rango de cantidad
-            const rngCantidad = document.getElementById('rngCantidad');
-            const cantidadValue = document.getElementById('cantidadValue');
-            rngCantidad.addEventListener('input', () => {
-                cantidadValue.textContent = rngCantidad.value;
-            });
-
-            // Configurar fecha actual como valor por defecto
-            const fechaInput = document.getElementById('dtpFechaRegistro');
-            const hoy = new Date().toISOString().split('T')[0];
-            fechaInput.value = hoy;
-
-            // Evento de envío del formulario
-            const frm = document.getElementById('frmAltaProducto');
-            frm.addEventListener('submit', agregarProducto);
-
-            // Evento para mostrar base de datos
-            document.getElementById('btnMostrarBD').addEventListener('click', mostrarBaseDatos);
-
-            // Evento para generar PDF
-            document.getElementById('btnGenerarPDF').addEventListener('click', generarPDF);
-
-            // Evento para vaciar base de datos
-            document.getElementById('btnVaciarBD').addEventListener('click', vaciarBaseDatos);
-
-            // Evento para buscar productos
-            document.getElementById('btnBuscar').addEventListener('click', buscarProductos);
-            document.getElementById('txtBuscar').addEventListener('keyup', buscarProductos);
-            document.getElementById('cboFiltroCategoria').addEventListener('change', buscarProductos);
-            
-            // Evento para cancelar edición
-            document.getElementById('btnCancelarEdicion').addEventListener('click', cancelarEdicion);
-        });
-
-        // Función para cargar productos desde localStorage
-        function cargarProductosDesdeStorage() {
-            const productosStorage = localStorage.getItem('productos');
-            if (productosStorage) {
-                productos = JSON.parse(productosStorage);
-                actualizarBotonesAccion();
-            }
-        }
-
-        // Función para guardar productos en localStorage
-        function guardarProductosEnStorage() {
-            localStorage.setItem('productos', JSON.stringify(productos));
-            actualizarBotonesAccion();
-        }
-
-        // Función para actualizar botones de acción
-        function actualizarBotonesAccion() {
-            const btnMostrarBD = document.getElementById('btnMostrarBD');
-            const btnGenerarPDF = document.getElementById('btnGenerarPDF');
-            const btnVaciarBD = document.getElementById('btnVaciarBD');
-            
-            if (productos.length > 0) {
-                btnMostrarBD.style.display = 'inline-block';
-                btnGenerarPDF.style.display = 'inline-block';
-                btnVaciarBD.style.display = 'inline-block';
-            } else {
-                btnMostrarBD.style.display = 'none';
-                btnGenerarPDF.style.display = 'none';
-                btnVaciarBD.style.display = 'none';
-                document.getElementById('divListaProductos').style.display = 'none';
-                document.getElementById('searchSection').style.display = 'none';
-            }
-        }
-
-        // Función para agregar un producto
-        function agregarProducto(e) {
-            e.preventDefault();
-            const frm = e.target;
-            
-            // Validar formulario
-            if (!frm.checkValidity()) {
-                frm.classList.add('was-validated');
-                return;
-            }
-            
-            // Obtener valores del formulario
-            const id = parseInt(document.getElementById('txtIDArticulo').value);
-            const nombre = document.getElementById('txtNombre').value;
-            const cantidad = document.getElementById('rngCantidad').value;
-            const descripcion = document.getElementById('txtDescripcion').value;
-            const precio = parseFloat(document.getElementById('txtPrecio').value);
-            const categoria = document.getElementById('cboCategoria').value;
-            const fecha = document.getElementById('dtpFechaRegistro').value;
-            const disponible = document.querySelector('input[name="disponibilidad"]:checked').value;
-            
-            // Obtener tamaños seleccionados
-            const tamanos = [];
-            document.querySelectorAll('input[name="tamanos"]:checked').forEach(chk => {
-                tamanos.push(chk.value);
-            });
-            
-            // Manejar imagen
-            const imgInput = document.getElementById('imgProducto');
-            let imagen = '';
-            
-            if (imgInput.files.length > 0) {
-                const file = imgInput.files[0];
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imagen = e.target.result;
-                    finalizarAgregarProducto(id, nombre, cantidad, descripcion, precio, categoria, fecha, disponible, tamanos, imagen);
-                }
-                reader.readAsDataURL(file);
-            } else {
-                finalizarAgregarProducto(id, nombre, cantidad, descripcion, precio, categoria, fecha, disponible, tamanos, imagen);
-            }
-        }
-
-        // Finalizar proceso de agregar producto
-        function finalizarAgregarProducto(id, nombre, cantidad, descripcion, precio, categoria, fecha, disponible, tamanos, imagen) {
-            // Verificar si el ID ya existe
-            const idExistente = productos.some(p => p.id === id);
-            
-            if (idExistente && !editando) {
-                mostrarNotificacion('error', 'El ID del producto ya existe. Por favor, utiliza otro ID.');
-                return;
-            }
-            
-            // Crear objeto producto
-            const producto = {
-                id,
-                nombre,
-                cantidad: parseInt(cantidad),
-                descripcion,
-                precio,
-                categoria,
-                fecha,
-                disponible,
-                tamanos,
-                imagen
-            };
-            
-            if (editando) {
-                // Actualizar producto existente
-                const index = productos.findIndex(p => p.id === productoEditando.id);
-                if (index !== -1) {
-                    // Mantener imagen si no se cambió
-                    if (!imagen && imagenEditando) {
-                        producto.imagen = imagenEditando;
-                    }
-                    productos[index] = producto;
-                }
-                editando = false;
-                productoEditando = null;
-                imagenEditando = null;
-                mostrarNotificacion('success', 'Producto actualizado correctamente');
-            } else {
-                // Agregar nuevo producto
-                productos.push(producto);
-                mostrarNotificacion('success', 'Producto añadido correctamente');
-            }
-            
-            // Guardar en localStorage
-            guardarProductosEnStorage();
-            
-            // Resetear formulario
-            resetearFormulario();
-            
-            // Cambiar texto del botón si estaba en modo edición
-            document.querySelector('#frmAltaProducto button[type="submit"]').innerHTML = '<i class="fas fa-plus-circle me-2"></i>Añadir Producto';
-            
-            // Ocultar botón de cancelar edición
-            document.getElementById('btnCancelarEdicion').style.display = 'none';
-            
-            // Quitar estilo de modo edición
-            document.getElementById('formContainer').classList.remove('editing-mode');
-        }
-
-        // Función para resetear el formulario
-        function resetearFormulario() {
-            document.getElementById('frmAltaProducto').reset();
-            document.getElementById('frmAltaProducto').classList.remove('was-validated');
-            document.getElementById('cantidadValue').textContent = '50';
-            document.getElementById('rngCantidad').value = '50';
-            document.getElementById('dtpFechaRegistro').value = new Date().toISOString().split('T')[0];
-            document.getElementById('disponible').checked = true;
-        }
-
-        // Función para mostrar notificación
-        function mostrarNotificacion(tipo, mensaje) {
-            const notification = document.getElementById('notification');
-            const messageSpan = document.getElementById('notification-message');
-            
-            notification.className = 'notification alert alert-dismissible fade show';
-            
-            if (tipo === 'success') {
-                notification.classList.add('alert-success');
-                notification.innerHTML = `<strong><i class="fas fa-check-circle me-2"></i>Éxito!</strong> <span id="notification-message">${mensaje}</span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
-            } else if (tipo === 'error') {
-                notification.classList.add('alert-danger');
-                notification.innerHTML = `<strong><i class="fas fa-exclamation-circle me-2"></i>Error!</strong> <span id="notification-message">${mensaje}</span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
-            } else if (tipo === 'info') {
-                notification.classList.add('alert-info');
-                notification.innerHTML = `<strong><i class="fas fa-info-circle me-2"></i>Información</strong> <span id="notification-message">${mensaje}</span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
-            }
-            
-            notification.style.display = 'block';
-            
-            // Ocultar después de 3 segundos
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
-        }
-
-        // Función para mostrar la base de datos
-        function mostrarBaseDatos() {
-            document.getElementById('searchSection').style.display = 'block';
-            document.getElementById('divListaProductos').style.display = 'block';
-            buscarProductos();
-        }
-
-        // Función para buscar productos
-        function buscarProductos() {
-            const termino = document.getElementById('txtBuscar').value.toLowerCase();
-            const categoria = document.getElementById('cboFiltroCategoria').value;
-            const tbody = document.getElementById('tbodyProductos');
-            const noResults = document.getElementById('noResults');
-            
-            // Limpiar tabla
-            tbody.innerHTML = '';
-            
-            // Filtrar productos
-            const productosFiltrados = productos.filter(producto => {
-                const coincideNombre = producto.nombre.toLowerCase().includes(termino);
-                const coincideId = producto.id.toString().includes(termino);
-                const coincideCategoria = categoria ? producto.categoria === categoria : true;
-                
-                return (coincideNombre || coincideId) && coincideCategoria;
-            });
-            
-            // Mostrar resultados
-            if (productosFiltrados.length === 0) {
-                noResults.style.display = 'block';
-            } else {
-                noResults.style.display = 'none';
-                productosFiltrados.forEach(producto => {
-                    const fila = crearFilaProducto(producto);
-                    tbody.appendChild(fila);
-                });
-            }
-        }
-
-        // Función para crear fila de producto
-        function crearFilaProducto(producto) {
-            const fila = document.createElement('tr');
-            
-            // ID
-            const tdId = document.createElement('td');
-            tdId.textContent = producto.id;
-            fila.appendChild(tdId);
-            
-            // Imagen
-            const tdImg = document.createElement('td');
-            if (producto.imagen) {
-                const img = document.createElement('img');
-                img.src = producto.imagen;
-                img.className = 'product-img';
-                img.alt = producto.nombre;
-                tdImg.appendChild(img);
-            } else {
-                tdImg.innerHTML = '<i class="fas fa-image text-muted"></i>';
-            }
-            fila.appendChild(tdImg);
-            
-            // Nombre
-            const tdNombre = document.createElement('td');
-            tdNombre.textContent = producto.nombre;
-            fila.appendChild(tdNombre);
-            
-            // Cantidad
-            const tdCantidad = document.createElement('td');
-            tdCantidad.textContent = producto.cantidad;
-            fila.appendChild(tdCantidad);
-            
-            // Precio
-            const tdPrecio = document.createElement('td');
-            tdPrecio.textContent = `$${producto.precio.toFixed(2)}`;
-            fila.appendChild(tdPrecio);
-            
-            // Categoría
-            const tdCategoria = document.createElement('td');
-            tdCategoria.textContent = producto.categoria === 'clasicas' ? 'Clásicas' : 
-                                     producto.categoria === 'especiales' ? 'Especiales' : 
-                                     producto.categoria === 'bebidas' ? 'Bebidas' : 'Postres';
-            fila.appendChild(tdCategoria);
-            
-            // Disponible
-            const tdDisponible = document.createElement('td');
-            tdDisponible.innerHTML = producto.disponible === 'disponible' ? 
-                '<span class="badge bg-success">Disponible</span>' : 
-                '<span class="badge bg-danger">No disponible</span>';
-            fila.appendChild(tdDisponible);
-            
-            // Tamaños
-            const tdTamanos = document.createElement('td');
-            if (producto.tamanos && producto.tamanos.length > 0) {
-                const tamanos = producto.tamanos.map(t => 
-                    t === 'personal' ? 'Personal' : 
-                    t === 'mediana' ? 'Mediana' : 'Familiar'
-                );
-                tdTamanos.textContent = tamanos.join(', ');
-            } else {
-                tdTamanos.textContent = 'N/A';
-            }
-            fila.appendChild(tdTamanos);
-            
-            // Fecha
-            const tdFecha = document.createElement('td');
-            tdFecha.textContent = producto.fecha;
-            fila.appendChild(tdFecha);
-            
-            // Acciones
-            const tdAcciones = document.createElement('td');
-            tdAcciones.className = 'text-center';
-            
-            // Botón Editar
-            const btnEditar = document.createElement('button');
-            btnEditar.className = 'btn btn-sm btn-warning btn-action';
-            btnEditar.innerHTML = '<i class="fas fa-edit"></i>';
-            btnEditar.title = 'Editar producto';
-            btnEditar.onclick = () => editarProducto(producto);
-            tdAcciones.appendChild(btnEditar);
-            
-            // Botón Eliminar
-            const btnEliminar = document.createElement('button');
-            btnEliminar.className = 'btn btn-sm btn-danger btn-action';
-            btnEliminar.innerHTML = '<i class="fas fa-trash"></i>';
-            btnEliminar.title = 'Eliminar producto';
-            btnEliminar.onclick = () => eliminarProducto(producto.id);
-            tdAcciones.appendChild(btnEliminar);
-            
-            fila.appendChild(tdAcciones);
-            
-            return fila;
-        }
-
-        // Función para editar un producto
-        function editarProducto(producto) {
-            editando = true;
-            productoEditando = producto;
-            imagenEditando = producto.imagen;
-            
-            // Llenar formulario con datos del producto
-            document.getElementById('txtIDArticulo').value = producto.id;
-            document.getElementById('txtNombre').value = producto.nombre;
-            document.getElementById('rngCantidad').value = producto.cantidad;
-            document.getElementById('cantidadValue').textContent = producto.cantidad;
-            document.getElementById('txtDescripcion').value = producto.descripcion;
-            document.getElementById('txtPrecio').value = producto.precio;
-            document.getElementById('cboCategoria').value = producto.categoria;
-            document.getElementById('dtpFechaRegistro').value = producto.fecha;
-            
-            // Disponibilidad
-            document.getElementById(producto.disponible === 'disponible' ? 'disponible' : 'noDisponible').checked = true;
-            
-            // Tamaños
-            document.querySelectorAll('input[name="tamanos"]').forEach(chk => {
-                chk.checked = producto.tamanos && producto.tamanos.includes(chk.value);
-            });
-            
-            // Cambiar texto del botón de envío
-            document.querySelector('#frmAltaProducto button[type="submit"]').innerHTML = '<i class="fas fa-save me-2"></i>Guardar Cambios';
-            
-            // Mostrar botón de cancelar edición
-            document.getElementById('btnCancelarEdicion').style.display = 'block';
-            
-            // Añadir estilo para indicar modo edición
-            document.getElementById('formContainer').classList.add('editing-mode');
-            
-            // Desplazar a formulario
-            document.getElementById('frmAltaProducto').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Función para cancelar la edición
-        function cancelarEdicion() {
-            // Resetear formulario
-            resetearFormulario();
-            
-            // Restaurar estado original
-            editando = false;
-            productoEditando = null;
-            imagenEditando = null;
-            
-            // Cambiar texto del botón de envío
-            document.querySelector('#frmAltaProducto button[type="submit"]').innerHTML = '<i class="fas fa-plus-circle me-2"></i>Añadir Producto';
-            
-            // Ocultar botón de cancelar edición
-            document.getElementById('btnCancelarEdicion').style.display = 'none';
-            
-            // Quitar estilo de modo edición
-            document.getElementById('formContainer').classList.remove('editing-mode');
-            
-            // Mostrar notificación
-            mostrarNotificacion('info', 'Edición cancelada. Los cambios no se han guardado.');
-        }
-
-        // Función para eliminar un producto
-        function eliminarProducto(id) {
-            if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
-                productos = productos.filter(p => p.id !== id);
-                guardarProductosEnStorage();
-                mostrarNotificacion('success', 'Producto eliminado correctamente');
-                buscarProductos();
-            }
-        }
-
-        // Función para vaciar la base de datos
-        function vaciarBaseDatos() {
-            if (confirm('¿Estás seguro de que deseas vaciar todo el almacén? Esta acción no se puede deshacer.')) {
-                productos = [];
-                localStorage.removeItem('productos');
-                actualizarBotonesAccion();
-                mostrarNotificacion('info', 'El almacén ha sido vaciado');
-                document.getElementById('tbodyProductos').innerHTML = '';
-                document.getElementById('noResults').style.display = 'none';
-            }
-        }
-
-        // Función para generar PDF
-        async function generarPDF() {
-            if (productos.length === 0) {
-                mostrarNotificacion('info', 'No hay productos para generar PDF');
-                return;
-            }
-            
-            try {
-                // Verificar que jsPDF está cargado
-                if (typeof window.jspdf === 'undefined') {
-                    throw new Error('La librería jsPDF no está cargada');
-                }
-
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "letter" });
-
-                // Logo de Pizza Planet
-                const urlLogo = "src/assets/image/pizzaLogo.png";
-                const imgLogo = await cargarImagenBase64(urlLogo);
-
-                // ENCABEZADO
-                doc.addImage(imgLogo, "PNG", 10, 10, 30, 30);
-                doc.setFont("Helvetica", "bold");
-                doc.setFontSize(18);
-                doc.text("Reporte de Productos - Pizza Planet", 105, 20, { align: "center" });
-
-                // TABLA
-                const cuerpo = productos.map(p => [
-                    p.id,
-                    p.nombre,
-                    p.categoria === 'clasicas' ? 'Clásicas' : 
-                    p.categoria === 'especiales' ? 'Especiales' : 
-                    p.categoria === 'bebidas' ? 'Bebidas' : 'Postres',
-                    p.cantidad,
-                    `$${p.precio.toFixed(2)}`,
-                    p.disponible === 'disponible' ? 'Sí' : 'No',
-                    p.fecha
-                ]);
-
-                doc.autoTable({
-                    head: [["ID", "Nombre", "Categoría", "Cant.", "Precio", "Disponible", "Fecha Registro"]],
-                    body: cuerpo,
-                    startY: 40,
-                    styles: { fontSize: 8 },
-                    headStyles: {
-                        fillColor: [107, 45, 16], // Color marrón de Pizza Planet
-                        textColor: 255,
-                        halign: "center"
-                    },
-                    bodyStyles: {
-                        halign: "center"
-                    },
-                    alternateRowStyles: {
-                        fillColor: [248, 243, 239] // Color de fondo alterno
-                    }
-                });
-
-                doc.addPage();
-
-                // ENCABEZADO de la segunda página
-                doc.addImage(imgLogo, "PNG", 10, 10, 30, 30);
-                doc.setFont("Helvetica", "bold");
-                doc.setFontSize(18);
-                doc.text("Distribución de Productos por Categoría", 105, 20, { align: "center" });
-
-                // GRÁFICA DE BARRAS
-                let posX = 20;
-                const posY = 80;
-                const anchoBarra = 20;
-                const espacio = 15;
-                const alturaMax = 60;
-
-                // Contar productos por categoría
-                const conteo = {};
-                for (const producto of productos) {
-                    conteo[producto.categoria] = (conteo[producto.categoria] || 0) + 1;
-                }
-
-                const valores = Object.values(conteo);
-                const max = Math.max(...valores);
-
-                const colores = [
-                    [255, 140, 66],  // Naranja
-                    [107, 45, 16],   // Marrón
-                    [255, 215, 0],   // Amarillo
-                    [0, 0, 0],       // Negro
-                    [255, 99, 132],  // Rosa
-                    [54, 162, 235],  // Azul
-                    [75, 192, 192]   // Verde azulado
-                ];
-
-                let colorIndex = 0;
-
-                for (const [cat, cantidad] of Object.entries(conteo)) {
-                    const altura = (cantidad / max) * alturaMax;
-                    const color = colores[colorIndex % colores.length];
-                    doc.setFillColor(...color);
-                    doc.rect(posX, posY + alturaMax - altura, anchoBarra, altura, "F");
-
-                    doc.setFontSize(10);
-                    doc.setTextColor(0);
-                    // Nombre de la categoría (traducido)
-                    const nombreCategoria = 
-                        cat === 'clasicas' ? 'Clásicas' :
-                        cat === 'especiales' ? 'Especiales' :
-                        cat === 'bebidas' ? 'Bebidas' : 'Postres';
-                    doc.text(nombreCategoria, posX + anchoBarra / 2, posY + alturaMax + 5, { align: "center" });
-                    doc.text(`${cantidad}`, posX + anchoBarra / 2, posY + alturaMax - altura - 2, { align: "center" });
-
-                    posX += anchoBarra + espacio;
-                    colorIndex++;
-                }
-
-                // Pie de página para todas las páginas
-                const totalPages = doc.getNumberOfPages();
-                for (let i = 1; i <= totalPages; i++) {
-                    doc.setPage(i);
-                    doc.setFontSize(10);
-                    doc.setTextColor(150);
-                    doc.text(
-                        `Página ${i} de ${totalPages}`,
-                        doc.internal.pageSize.getWidth() / 2,
-                        doc.internal.pageSize.getHeight() - 10,
-                        { align: "center" }
-                    );
-                }
-
-                doc.save("reporte_productos_pizza_planet.pdf");
-                mostrarNotificacion('success', 'PDF generado con éxito');
-            } catch (err) {
-                console.error("Error generando PDF:", err);
-                mostrarNotificacion('error', 'Error al generar el PDF: ' + err.message);
-            }
-        }
-
-        // Función para cargar imagen como base64
-        function cargarImagenBase64(url) {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.crossOrigin = "anonymous";
-                img.onload = () => {
-                    const canvas = document.createElement("canvas");
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    const ctx = canvas.getContext("2d");
-                    ctx.drawImage(img, 0, 0);
-                    resolve(canvas.toDataURL("image/png"));
-                };
-                img.onerror = () => reject("Error al cargar imagen.");
-                img.src = url;
-            });
-        }
-
-        // Inicializar con datos de ejemplo (para demostración)
-        function inicializarDatosEjemplo() {
-            if (productos.length === 0) {
-                productos = [
-                    {
-                        id: 1,
-                        nombre: "Pizza Margarita",
-                        cantidad: 15,
-                        descripcion: "Clásica pizza con salsa de tomate, mozzarella y albahaca",
-                        precio: 9.99,
-                        categoria: "clasicas",
-                        fecha: "2023-10-15",
-                        disponible: "disponible",
-                        tamanos: ["personal", "mediana", "familiar"]
-                    },
-                    {
-                        id: 2,
-                        nombre: "Pizza Pepperoni",
-                        cantidad: 22,
-                        descripcion: "Pizza con salsa de tomate, mozzarella y pepperoni",
-                        precio: 11.99,
-                        categoria: "clasicas",
-                        fecha: "2023-10-16",
-                        disponible: "disponible",
-                        tamanos: ["mediana", "familiar"]
-                    },
-                    {
-                        id: 3,
-                        nombre: "Refresco de Cola",
-                        cantidad: 50,
-                        descripcion: "Refresco de cola 500ml",
-                        precio: 2.50,
-                        categoria: "bebidas",
-                        fecha: "2023-10-14",
-                        disponible: "disponible",
-                        tamanos: []
-                    }
-                ];
-                guardarProductosEnStorage();
-            }
-        }
-        
-        // Inicializar datos de ejemplo al cargar
-        inicializarDatosEjemplo();
-    </script>
+    <script type="module" src="/src/js/tablaeventos.js"></script>
+    <script type="module" src="/src/js/reporte.js"></script>
 </body>
+
 </html>
