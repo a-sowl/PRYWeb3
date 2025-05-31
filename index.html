@@ -88,7 +88,7 @@ body {
 
         header {
             background: linear-gradient(rgba(243, 193, 131, 0.9), rgba(243, 193, 131, 0.7)), 
-                        url('src/assets/image/pizza-header.jpg') center/cover;
+                        url('src/assets/image/pizza-header.png') center/cover;
             text-align: center;
             padding: 4rem 1rem;
             margin-bottom: 2rem;
@@ -351,12 +351,17 @@ body {
     </nav>
     
     <!-- Header -->
-    <header id="inicio">
-        <div class="container">
-            <h1 class="titulo-principal">Bienvenido a PizzaPlanet</h1>
-            <p class="slogan">Cada rebanada es un sabor a perfección</p>
+     <header id="inicio">
+        <div class="container d-flex align-items-center justify-content-between flex-wrap">
+            <div>
+                <h1 class="titulo-principal">Bienvenido a PizzaPlanet</h1>
+                <p class="slogan">Cada rebanada es un sabor a perfección</p>
+            </div>
+            <div>
+                <img src="/src/assets/image/pizza-header.png" alt="Pizza Logo" class="img-fluid" style="max-width: 512px;">
+            </div>
         </div>
-    </header>
+     </header>
 
     <!-- Sección de invitación a productos -->
     <section class="container invitacion-section" id="productos">

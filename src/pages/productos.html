@@ -145,7 +145,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="index.html">
+            <a class="navbar-brand d-flex align-items-center" href="/index.html">
                 <img src="/src/assets/image/pizzaLogo.png" alt="PizzaPlanet Logo">
                 PizzaPlanet
             </a>
@@ -154,16 +154,16 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#quienes-somos">¿Quiénes somos?</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="productos.html">Productos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#contacto">Contáctanos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/index.html#quienes-somos">¿Quiénes somos?</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/src/pages/productos.html">Productos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/index.html#contacto">Contáctanos</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Header -->
+    <!-- Header --> 
     <header class="bg-light py-5">
         <div class="container text-center">
             <h1 class="display-4" style="font-family: 'BebasNeue', sans-serif; color: var(--primary-color);">NUESTRAS DELICIOSAS PIZZAS</h1>
@@ -310,7 +310,7 @@
                         <h5 class="cart-total">Total: $<span id="cart-total">0.00</span></h5>
                     </div>
                     <button class="btn btn-checkout w-100 mt-3" id="checkout-btn" disabled data-bs-toggle="modal" data-bs-target="#paymentModal">
-                        <i class="bi bi-credit-card"></i> Realizar Pedido
+                        <i class="bi bi-credit-card"></i> Registrar Pedido
                     </button>
                 </div>
             </div>
@@ -447,7 +447,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success" onclick="submitOrder()">Confirmar Pedido</button>
+                    <button type="button" class="btn btn-success" onclick="submitOrder()">Realizar pago</button>
                 </div>
             </div>
         </div>
@@ -587,22 +587,37 @@
         }
         
         function submitOrder() {
-            const form = document.getElementById('payment-form');
-            if (form.checkValidity()) {
-                // Aquí iría la lógica para procesar el pedido
-                alert('¡Pedido realizado con éxito! Gracias por tu compra.');
-                
-                // Limpiar carrito
-                cart = [];
-                updateCart();
-                
-                // Cerrar modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
-                modal.hide();
-            } else {
-                form.reportValidity();
-            }
+    const form = document.getElementById('payment-form');
+    if (form.checkValidity()) {
+        // Aquí iría la lógica para procesar el pedido
+        alert('¡Pedido realizado con éxito! Gracias por tu compra.');
+        
+        // Limpiar carrito
+        cart = [];
+        updateCart();
+        
+        // Cerrar modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
+        modal.hide();
+
+        // Mostrar botón "Guardar ticket" debajo del carrito
+        const cartContainer = document.querySelector('.cart-container');
+        let voucherButton = document.getElementById('save-voucher-btn');
+        if (!voucherButton) {
+            voucherButton = document.createElement('button');
+            voucherButton.id = 'save-voucher-btn';
+            voucherButton.className = 'btn btn-primary w-100 mt-3';
+            voucherButton.textContent = 'Guardar ticket';
+            voucherButton.onclick = () => {
+                alert('ticket guardado con éxito.');
+                voucherButton.remove(); // Eliminar el botón después de hacer clic
+            };
+            cartContainer.appendChild(voucherButton);
         }
+    } else {
+        form.reportValidity();
+    }
+}
         
         // Inicializar el modal de pago para mostrar tarjeta por defecto
         document.addEventListener('DOMContentLoaded', () => {

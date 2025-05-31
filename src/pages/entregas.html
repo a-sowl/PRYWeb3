@@ -372,8 +372,7 @@
       
       <div class="action-buttons">
         <button id="btn-registrar-ruta" class="btn">Registrar la ruta</button>
-        <button id="btn-calcular-tiempo" class="btn">Calcular tiempo de entrega estimada</button>
-        <button id="btn-notificar" class="btn">Notificar al cliente</button>
+        <button id="btn-notificar" class="btn">Enviar notificación al cliente</button>
         <button id="btn-entregado" class="btn btn-success">Pedido entregado</button>
       </div>
     </section>
@@ -449,9 +448,17 @@
       });
       
       // Botón Registrar Ruta
-      document.getElementById('btn-registrar-ruta').addEventListener('click', () => {
-        mostrarPopup("Ruta de entrega registrada en el sistema.");
-      });
+document.getElementById('btn-registrar-ruta').addEventListener('click', () => {
+    mostrarPopup("Ruta de entrega registrada en el sistema.");
+
+    // Iniciar el cálculo del tiempo de entrega estimada
+    if (tiempoEstimadoInterval) {
+        mostrarPopup("El tiempo de entrega ya está siendo calculado", "error");
+        return;
+    }
+    iniciarTemporizador();
+    mostrarPopup("Tiempo de entrega estimado calculado. ¡Buen viaje!");
+});
       
       // Botón Calcular Tiempo
       document.getElementById('btn-calcular-tiempo').addEventListener('click', () => {

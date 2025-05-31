@@ -160,6 +160,7 @@ function mostrarProductos() {
     if (productos.length === 0) {
         document.getElementById('divListaProductos').style.display = 'none';
         document.getElementById('searchSection').style.display = 'none';
+        mostrarNotificacion('info', 'No hay productos registrados.');
         return;
     }
     document.getElementById('divListaProductos').style.display = 'block';
